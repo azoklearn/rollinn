@@ -1,0 +1,2118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rollin' Protéines — Le food truck protéiné de Nantes</title>
+<meta name="description" content="Le premier food truck protéiné de Nantes. Shakes maison, snacks healthy et goodies sains, servis depuis une caravane vintage relookée." />
+<link rel="icon" type="image/png" href="uploads/Logo-vignette-orange.png" />
+<link rel="apple-touch-icon" href="uploads/Logo-vignette-orange.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Bowlby+One+SC&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Caveat:wght@500;700&family=Gluten:wght@500;700;800&family=Pacifico&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --orange: #ff6a1a;
+    --orange-deep: #e85a0e;
+    --cream: #fbefd9;
+    --cream-deep: #f5e2bf;
+    --red: #d63a1f;
+    --red-deep: #b32d14;
+    --ink: #2a1505;
+    --ink-soft: #5a3a22;
+    --yellow: #ffd23d;
+    --white: #ffffff;
+    --display: "Bagel Fat One", system-ui, sans-serif;
+    --block: "Bowlby One SC", "Archivo Black", sans-serif;
+    --body: "DM Sans", system-ui, sans-serif;
+    --hand: "Caveat", cursive;
+    --max: 1280px;
+    --radius: 22px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: auto; overflow-x: hidden; } /* lenis handles smoothness */
+
+  /* ============ NOISE TEXTURE ============ */
+  .texture-grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.15;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 150px;
+  }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+  button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
+
+  /* ============ PROGRESS BAR ============ */
+  #progressBar {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--orange);
+    transform-origin: left center;
+    transform: scaleX(0);
+    z-index: 300;
+    pointer-events: none;
+  }
+
+  /* ============ CUSTOM CURSOR ============ */
+  @media (pointer: fine) {
+    body, a, button, [role="button"] { cursor: none; }
+  }
+  .cursor-dot {
+    position: fixed;
+    width: 8px; height: 8px;
+    background: var(--orange);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100002;
+    top: 0; left: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity .2s, background .2s;
+    will-change: transform;
+  }
+  .cursor-dot.hidden { opacity: 0; }
+  .cursor-ring {
+    position: fixed;
+    width: 38px; height: 38px;
+    border: 2px solid var(--orange);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 100001;
+    top: 0; left: 0;
+    transform: translate(-50%, -50%);
+    transition: width .25s, height .25s, border-color .25s, background .25s;
+    will-change: transform;
+  }
+  .cursor-ring.big {
+    width: 60px; height: 60px;
+    border-color: var(--red);
+    background: rgba(214, 58, 31, .07);
+  }
+  /* On the orange menu overlay, switch the cursor to cream so it stays visible */
+  body.menu-open .cursor-dot { background: var(--cream); }
+  body.menu-open .cursor-ring { border-color: var(--cream); }
+  body.menu-open .cursor-ring.big { border-color: var(--cream); background: rgba(251,239,217,.12); }
+  @media (pointer: coarse) { .cursor-dot, .cursor-ring { display: none; } }
+
+  /* ============ NAV ============ */
+  .nav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--cream);
+    border-bottom: 2px solid var(--ink);
+    transition: box-shadow .2s;
+  }
+  .nav.scrolled { box-shadow: 0 6px 0 -4px var(--ink); }
+  .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 78px; }
+  .brand { display: flex; align-items: center; color: var(--orange); }
+  .brand-logo { height: 46px; width: auto; display: block; object-fit: contain; }
+  .nav-links { display: flex; gap: 28px; align-items: center; }
+  .nav-links a {
+    font-weight: 600; font-size: 15px; color: var(--ink);
+    position: relative; padding: 6px 2px;
+  }
+  .nav-links a::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -2px;
+    height: 3px; background: var(--orange);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .25s;
+  }
+  .nav-links a:hover::after { transform: scaleX(1); }
+
+  /* ============ HAMBURGER + OVERLAY MENU ============ */
+  .nav-links { display: none !important; }   /* hamburger drives nav on all sizes */
+
+  .burger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 52px;
+    height: 52px;
+    padding: 0 13px;
+    border-radius: 999px;
+    border: 2px solid var(--ink);
+    background: var(--cream);
+    box-shadow: 3px 3px 0 var(--ink);
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s, background .2s;
+    z-index: 10001;
+    position: relative;
+  }
+  .burger:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--ink); }
+  .burger:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+
+  /* ============ LANGUAGE TOGGLE ============ */
+  .nav-tools { display: flex; align-items: center; gap: 12px; }
+  .lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    background: var(--cream);
+    box-shadow: 3px 3px 0 var(--ink);
+    overflow: hidden;
+    height: 40px;
+    font-family: var(--block);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .lang-toggle button {
+    border: none;
+    background: transparent;
+    color: var(--ink-soft);
+    padding: 0 13px;
+    height: 100%;
+    cursor: pointer;
+    font: inherit;
+    transition: background .2s, color .2s;
+  }
+  .lang-toggle button.active {
+    background: var(--orange);
+    color: var(--cream);
+  }
+  .lang-toggle button:not(.active):hover { color: var(--ink); }
+  .burger span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: var(--ink);
+    border-radius: 3px;
+    transition: transform .3s ease, opacity .2s ease;
+  }
+  .burger.open { background: var(--orange); }
+  .burger.open span { background: var(--cream); }
+  .burger.open span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; }
+  .burger.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: var(--orange);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .4s ease, visibility .4s ease;
+    overflow: hidden;
+  }
+  .menu-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.10) 2px, transparent 2px);
+    background-size: 26px 26px;
+    pointer-events: none;
+  }
+  .menu-overlay.open { opacity: 1; visibility: visible; }
+  .menu-overlay a {
+    font-family: var(--display);
+    font-size: clamp(34px, 7vw, 76px);
+    color: var(--cream);
+    -webkit-text-stroke: 2px var(--ink);
+    paint-order: stroke fill;
+    line-height: 1.05;
+    transform: translateY(24px);
+    opacity: 0;
+    transition: transform .2s, color .2s;
+    text-decoration: none;
+  }
+  .menu-overlay.open a { transform: translateY(0); opacity: 1; }
+  .menu-overlay a:hover { color: var(--yellow); }
+  .menu-overlay .menu-cta {
+    margin-top: 24px;
+    font-family: var(--block);
+    font-size: clamp(15px, 2vw, 20px);
+    -webkit-text-stroke: 0;
+    color: var(--ink);
+    background: var(--yellow);
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    padding: 16px 30px;
+    border-radius: 999px;
+  }
+  .menu-overlay .menu-cta:hover { color: var(--ink); background: var(--cream); }
+  .menu-foot {
+    position: absolute;
+    bottom: 32px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: var(--hand);
+    font-size: 22px;
+    color: var(--cream);
+    opacity: 0;
+    transition: opacity .3s .25s;
+  }
+  .menu-overlay.open .menu-foot { opacity: .85; }
+  body.menu-open { overflow: hidden; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: 999px;
+    font-family: var(--block); font-size: 14px;
+    letter-spacing: .06em; text-transform: uppercase;
+    transition: box-shadow .15s, background .15s;
+    border: 2.5px solid var(--ink);
+    position: relative;
+    will-change: transform;
+  }
+  .btn-primary { background: var(--orange); color: var(--ink); box-shadow: 4px 4px 0 0 var(--ink); }
+  .btn-ghost { background: transparent; color: var(--ink); box-shadow: 4px 4px 0 0 transparent; }
+  .btn-ghost:hover { background: var(--ink); color: var(--cream); }
+  .btn-red { background: var(--red); color: var(--cream); box-shadow: 4px 4px 0 0 var(--ink); }
+  .nav .btn { padding: 11px 18px; font-size: 12px; }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    height: calc(100svh - 78px);
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 32px 0;
+    overflow: hidden;
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding: 0 20px;
+    width: 100%;
+    max-width: 880px;
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--ink); color: var(--cream);
+    padding: 8px 16px; border-radius: 999px;
+    font-family: var(--block); font-size: 12px; letter-spacing: .12em;
+    overflow: hidden;
+  }
+  .eyebrow .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--yellow);
+    box-shadow: 0 0 0 3px rgba(255,210,61,.35);
+    animation: pulse 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 3px rgba(255,210,61,.35); }
+    50% { box-shadow: 0 0 0 7px rgba(255,210,61,0); }
+  }
+  .hero-logo {
+    width: min(560px, 86vw);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 12px 30px rgba(42,21,5,.45));
+  }
+  .hero-vignette {
+    width: clamp(96px, 12vw, 140px);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 10px 22px rgba(42,21,5,.18));
+    animation: vignetteFloat 5s ease-in-out infinite;
+  }
+  @keyframes vignetteFloat {
+    0%,100% { transform: translateY(0) rotate(0deg); }
+    50%     { transform: translateY(-10px) rotate(-2deg); }
+  }
+  .hero-title {
+    font-family: var(--display);
+    font-size: clamp(42px, 7.5vw, 92px);
+    line-height: 1.02;
+    color: var(--ink);
+    margin: 0;
+    max-width: 15ch;
+  }
+  .hero-title em { font-style: normal; color: var(--orange); }
+  .hero .lead {
+    font-size: clamp(17px, 2.1vw, 21px);
+    max-width: 540px;
+    color: var(--ink-soft);
+    font-weight: 500;
+    line-height: 1.55;
+    margin: 0;
+  }
+  .hero .lead strong { color: var(--ink); font-weight: 700; }
+  .hero .cta-row { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+
+  .check {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--orange);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: var(--cream); font-size: 13px; font-weight: 800; flex-shrink: 0;
+  }
+
+  /* ============ MARQUEE ============ */
+  .marquee {
+    background: var(--orange); color: var(--cream);
+    border-top: 2.5px solid var(--ink); border-bottom: 2.5px solid var(--ink);
+    overflow: hidden; padding: 16px 0; margin-top: 32px;
+  }
+  .marquee-track {
+    display: flex; gap: 48px; white-space: nowrap;
+    animation: scroll 26s linear infinite;
+    font-family: var(--display); font-size: 36px;
+  }
+  .marquee-track span { display: inline-flex; align-items: center; gap: 48px; }
+  .marquee .star { color: var(--yellow); font-family: var(--block); font-size: 28px; }
+  @keyframes scroll {
+    from { transform: skewX(-6deg) translateX(0); }
+    to { transform: skewX(-6deg) translateX(-50%); }
+  }
+
+  /* ============ SECTIONS ============ */
+  .section { padding: 96px 0; }
+  .section-head { max-width: 720px; margin-bottom: 56px; }
+  .label {
+    display: inline-block; font-family: var(--block);
+    font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--red); padding: 6px 0;
+    border-top: 2px solid var(--red); margin-bottom: 14px;
+  }
+  .h2 {
+    font-family: var(--display);
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: .95; color: var(--ink);
+    letter-spacing: -.01em; font-weight: 400;
+    text-wrap: balance;
+    will-change: transform, opacity;
+  }
+  .h2 em { font-style: normal; color: var(--orange); transform: skewX(-7deg); display: inline-block; }
+
+  /* ============ CONCEPT MASCOTTE ============ */
+  .concept-mascotte {
+    position: absolute;
+    top: 60px;
+    right: 40px;
+    width: clamp(180px, 20vw, 300px);
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+    transform: rotate(6deg);
+    filter: drop-shadow(0 16px 24px rgba(42,21,5,.18));
+  }
+  @media (max-width: 900px) {
+    .concept-mascotte { width: 130px; right: 12px; top: 20px; opacity: .9; }
+  }
+
+  /* ============ PILLARS ============ */
+  .pillars { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .pillar {
+    display: block; color: var(--ink); cursor: pointer;
+    background: var(--white); border: 2.5px solid var(--ink);
+    border-radius: var(--radius); padding: 28px;
+    position: relative; transition: box-shadow .2s;
+    box-shadow: 6px 6px 0 0 var(--ink);
+    will-change: transform;
+  }
+  .pillar:hover, .pillar:focus-visible { box-shadow: 9px 9px 0 0 var(--ink); outline: none; }
+  .pillar .pillar-cta {
+    display: inline-block; margin-top: 16px;
+    font-family: var(--block); font-size: 13px; letter-spacing: .04em;
+    color: var(--orange-deep); opacity: 0; transform: translateX(-6px);
+    transition: opacity .2s, transform .2s;
+  }
+  .pillar:hover .pillar-cta, .pillar:focus-visible .pillar-cta { opacity: 1; transform: translateX(0); }
+  .pillar .num {
+    position: absolute; top: -22px; left: 20px;
+    background: var(--red); color: var(--cream);
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--block); font-size: 18px; border: 2.5px solid var(--ink);
+  }
+  .pillar h3 { font-family: var(--block); font-size: 26px; margin-top: 16px; margin-bottom: 10px; }
+  .pillar p { color: var(--ink-soft); font-size: 15.5px; }
+  .pillar .ico {
+    width: 64px; height: 64px; background: var(--cream);
+    border: 2.5px solid var(--ink); border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 18px; font-size: 36px;
+  }
+
+  /* ============ TRIPTYCH ============ */
+  .triptych {
+    background: var(--ink); color: var(--cream);
+    border-radius: var(--radius); overflow: hidden;
+    display: grid; grid-template-columns: repeat(3,1fr);
+    border: 2.5px solid var(--ink);
+  }
+  .tri {
+    padding: 48px 32px;
+    border-right: 2px dashed rgba(251,239,217,.22);
+    position: relative;
+  }
+  .tri:last-child { border-right: none; }
+  .tri .big {
+    font-family: var(--display); font-size: 76px; line-height: .9;
+    color: var(--orange); transform: skewX(-7deg); display: inline-block;
+  }
+  .tri .label-w { font-family: var(--block); font-size: 14px; letter-spacing: .18em; color: var(--yellow); margin-bottom: 10px; }
+  .tri p { margin-top: 16px; color: rgba(251,239,217,.8); font-size: 15px; }
+
+  /* ============ MENU ============ */
+  .menu-section { background: var(--ink); color: var(--cream); }
+  .menu-section .label { color: var(--yellow); border-color: var(--yellow); }
+  .menu-section .h2 { color: var(--cream); }
+  .menu-section .h2 em { color: var(--orange); }
+  .menu-tabs {
+    display: inline-flex;
+    background: rgba(251,239,217,.08); border: 2px solid rgba(251,239,217,.2);
+    border-radius: 999px; padding: 6px; margin-bottom: 36px;
+  }
+  .menu-tab {
+    font-family: var(--block); font-size: 13px; letter-spacing: .08em;
+    padding: 10px 22px; border-radius: 999px;
+    color: rgba(251,239,217,.65); transition: background .2s, color .2s;
+  }
+  .menu-tab.active { background: var(--orange); color: var(--ink); }
+  .menu-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  .menu-card {
+    background: var(--cream); color: var(--ink);
+    border-radius: 18px; overflow: hidden;
+    border: 2.5px solid var(--ink); box-shadow: 6px 6px 0 0 var(--orange);
+    display: flex; flex-direction: column;
+    transition: box-shadow .2s;
+    will-change: transform;
+  }
+  .menu-card:hover { box-shadow: 9px 9px 0 0 var(--orange); }
+  .menu-card .photo {
+    aspect-ratio: 4/3; position: relative; overflow: hidden;
+    background: repeating-linear-gradient(45deg, var(--cream-deep) 0 12px, var(--cream) 12px 24px);
+    display: flex; align-items: center; justify-content: center;
+    border-bottom: 2.5px solid var(--ink);
+  }
+  .menu-card .photo .ph-label {
+    font-family: ui-monospace, monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: .15em; color: var(--ink-soft);
+    background: var(--cream); border: 1.5px solid var(--ink-soft);
+    border-radius: 6px; padding: 4px 8px;
+  }
+  .menu-card .photo img { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: transform .3s ease; }
+  .menu-card .photo img:hover { transform: scale(1.05); }
+  /* Image lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 10000;
+    background: rgba(20,8,0,.86); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    opacity: 0; visibility: hidden; transition: opacity .25s;
+    cursor: zoom-out;
+  }
+  .lightbox.open { opacity: 1; visibility: visible; }
+  .lightbox .lb-stage { position: relative; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .lightbox img {
+    max-width: min(860px, 88vw); max-height: 80vh; width: auto; height: auto;
+    border: 3px solid var(--ink); border-radius: 16px;
+    box-shadow: 10px 10px 0 0 var(--orange);
+    transform: scale(.94); transition: transform .25s ease;
+  }
+  .lightbox.open img { transform: scale(1); }
+  .lightbox .lb-count { font-family: var(--block); font-size: 13px; letter-spacing: .1em; color: var(--cream); opacity: .8; }
+  .lightbox .lb-close, .lightbox .lb-nav {
+    background: var(--cream); color: var(--ink); border: 2.5px solid var(--ink);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; font-family: var(--block); line-height: 1;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .lightbox .lb-close:hover, .lightbox .lb-nav:hover { background: var(--orange); }
+  .lightbox .lb-close { position: absolute; top: 18px; right: 22px; width: 46px; height: 46px; font-size: 20px; z-index: 3; }
+  .lightbox .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 54px; height: 54px; font-size: 28px; z-index: 3; }
+  .lightbox .lb-nav:hover { transform: translateY(-50%) scale(1.08); }
+  .lightbox .lb-prev { left: 20px; }
+  .lightbox .lb-next { right: 20px; }
+  @media (max-width: 560px) {
+    .lightbox .lb-nav { width: 44px; height: 44px; font-size: 23px; }
+    .lightbox .lb-prev { left: 8px; }
+    .lightbox .lb-next { right: 8px; }
+  }
+  .menu-card .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .menu-card .name { font-family: var(--block); font-size: 20px; line-height: 1.1; }
+  .menu-card .desc { color: var(--ink-soft); font-size: 14px; flex: 1; }
+  .menu-card .macros { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+  .menu-card .macro-line { font-size: 11.5px; color: var(--ink-soft); line-height: 1.4; display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 7px; }
+  .menu-card .macro-line .ml { font-family: var(--block); font-size: 10px; background: var(--ink); color: var(--cream); border-radius: 5px; padding: 1px 6px; align-self: center; }
+  .menu-card .macro-line .kcal { font-family: var(--block); font-size: 12px; color: var(--orange-deep); }
+  .menu-card .macro-line b { color: var(--ink); font-weight: 700; }
+  .menu-card .row { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+  .menu-card .price { font-family: var(--display); font-size: 26px; color: var(--orange); transform: skewX(-6deg); display: inline-block; }
+  .menu-notes {
+    margin-top: 28px;
+    background: rgba(251,239,217,.06);
+    border: 2px solid rgba(251,239,217,.18);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+  }
+  .menu-notes p { color: rgba(251,239,217,.82); font-size: 14.5px; line-height: 1.6; }
+  .menu-notes strong { color: var(--yellow); font-weight: 700; }
+  .menu-drinks { margin-top: 16px; padding-top: 16px; border-top: 2px solid rgba(251,239,217,.14); }
+  .menu-drinks h4 { font-family: var(--block); font-size: 13px; letter-spacing: .12em; color: var(--yellow); margin-bottom: 12px; }
+  .menu-drinks ul { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 4px 24px; }
+  .menu-drinks li { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px dashed rgba(251,239,217,.14); }
+  .menu-drinks .d-name { color: var(--cream); font-size: 14px; }
+  .menu-drinks .d-price { font-family: var(--block); font-size: 13px; color: var(--orange); flex-shrink: 0; }
+  .badge { font-family: var(--block); font-size: 11px; letter-spacing: .08em; background: var(--red); color: var(--cream); padding: 4px 10px; border-radius: 999px; }
+  .badge.green { background: #2c7a3f; }
+  .badge.yellow { background: var(--yellow); color: var(--ink); }
+
+  /* ============ SERIES / REELS ============ */
+  .series .h2 em { color: var(--red); }
+  .reel-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+    justify-items: center;
+    align-items: start;
+  }
+  /* Instagram embeds */
+  .reel-row .instagram-media {
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: 360px !important;
+    margin: 0 auto !important;
+    border-radius: 18px !important;
+    border: 2.5px solid var(--ink) !important;
+    box-shadow: 6px 6px 0 0 var(--ink) !important;
+    overflow: hidden !important;
+  }
+
+  /* ============ GALLERY (film strip) ============ */
+  .gallery-section { background: var(--cream); overflow: hidden; }
+  .gallery-marquee { display: flex; flex-direction: column; gap: 30px; }
+  .gm-row {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  }
+  .gm-track { display: flex; gap: 26px; width: max-content; padding: 14px 13px; animation: gmScroll 48s linear infinite; }
+  .gm-row--rev .gm-track { animation-direction: reverse; }
+  .gm-row:hover .gm-track { animation-play-state: paused; }
+  @keyframes gmScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .gallery-item {
+    flex: 0 0 auto; width: 232px;
+    background: var(--white); padding: 12px 12px 14px;
+    border: 2.5px solid var(--ink); border-radius: 10px;
+    box-shadow: 6px 6px 0 0 var(--ink);
+    transform: rotate(var(--r, 0deg));
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .gallery-item img {
+    width: 100%; height: 288px; object-fit: cover; display: block;
+    border-radius: 5px; cursor: zoom-in;
+  }
+  .gallery-item figcaption {
+    font-family: var(--hand); font-size: 22px; line-height: 1;
+    color: var(--ink); text-align: center; margin-top: 9px;
+  }
+  .gallery-item:hover {
+    transform: rotate(0deg) scale(1.05); position: relative; z-index: 3;
+    box-shadow: 9px 9px 0 0 var(--orange);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .gm-track { animation: none; flex-wrap: wrap; justify-content: center; width: auto; }
+  }
+
+  /* ============ LOCATIONS ============ */
+  .locs { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: stretch; }
+  .map-card {
+    background: var(--white); border: 2.5px solid var(--ink);
+    border-radius: var(--radius); position: relative;
+    overflow: hidden; box-shadow: 6px 6px 0 0 var(--ink); min-height: 460px;
+  }
+  .map-bg { position: absolute; inset: 0; background: linear-gradient(135deg, var(--cream) 0%, var(--cream-deep) 100%); }
+  .map-bg::before {
+    content: ""; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(42,21,5,.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(42,21,5,.07) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .map-river {
+    position: absolute; left: 0; right: 0; top: 58%;
+    height: 60px; background: var(--orange); opacity: .25;
+    transform: rotate(-6deg) scaleX(1.2);
+  }
+  .pin {
+    position: absolute; width: 36px; height: 36px;
+    background: var(--red); border: 2.5px solid var(--ink);
+    border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: background .2s; z-index: 2;
+    will-change: transform;
+  }
+  .pin::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--cream); transform: rotate(45deg); }
+  .pin.active { background: var(--orange); z-index: 3; }
+  .pin .tip {
+    position: absolute; bottom: 46px; left: 50%;
+    transform: rotate(45deg) translateX(-50%);
+    transform-origin: top left;
+    background: var(--ink); color: var(--cream);
+    padding: 6px 10px; border-radius: 8px;
+    font-size: 11px; font-family: var(--block); letter-spacing: .06em;
+    white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity .15s;
+  }
+  .pin:hover .tip, .pin.active .tip { opacity: 1; }
+  .map-legend {
+    position: absolute; left: 18px; top: 18px;
+    background: var(--cream); border: 2px solid var(--ink);
+    border-radius: 12px; padding: 10px 14px;
+    font-family: var(--block); font-size: 11px; letter-spacing: .14em; z-index: 4;
+  }
+  .loc-list { display: flex; flex-direction: column; gap: 14px; }
+  .loc-item {
+    background: var(--white); border: 2.5px solid var(--ink);
+    border-radius: 16px; padding: 18px 22px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    transition: background .2s; cursor: pointer;
+    will-change: transform;
+  }
+  .loc-item:hover, .loc-item.active { background: var(--orange); }
+  .loc-item .day { font-family: var(--block); font-size: 14px; letter-spacing: .12em; color: var(--red); width: 100px; flex-shrink: 0; }
+  .loc-item:hover .day, .loc-item.active .day { color: var(--ink); }
+  .loc-item .place { font-weight: 700; font-size: 17px; }
+  .loc-item .hours { font-family: var(--block); font-size: 12px; letter-spacing: .08em; color: var(--ink-soft); }
+  .loc-item:hover .hours, .loc-item.active .hours { color: var(--ink); }
+  /* Locations — "arrive bientôt" state */
+  .map-soon .map-river { opacity: .15; }
+  .map-soon-badge { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 4; }
+  .map-soon-badge span {
+    font-family: var(--block); font-size: clamp(15px, 2.2vw, 20px); letter-spacing: .03em;
+    color: var(--ink); background: var(--yellow); border: 2.5px solid var(--ink);
+    border-radius: 999px; padding: 12px 22px; box-shadow: 5px 5px 0 0 var(--ink);
+    transform: rotate(-3deg);
+  }
+  .loc-soon {
+    background: var(--ink); color: var(--cream);
+    border: 2.5px solid var(--ink); border-radius: 16px; padding: 26px;
+    box-shadow: 6px 6px 0 0 var(--orange);
+  }
+  .loc-soon .em { font-family: var(--display); color: var(--orange); font-size: clamp(22px, 3.4vw, 28px); line-height: 1.08; }
+  .loc-soon p { color: rgba(251,239,217,.78); font-size: 15px; margin: 12px 0 18px; line-height: 1.55; }
+
+  /* ============ PRIVATIZE ============ */
+  .privatize { background: var(--orange); color: var(--ink); border-top: 2.5px solid var(--ink); border-bottom: 2.5px solid var(--ink); }
+  .privatize .label { color: var(--red); border-color: var(--red); }
+  .privatize .h2 { color: var(--ink); }
+  .privatize .h2 em { color: var(--cream); }
+  .priv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .priv-left p { font-size: 18px; max-width: 460px; }
+  .priv-feats { margin-top: 28px; display: flex; flex-direction: column; gap: 14px; }
+  .priv-feats li { list-style: none; font-weight: 600; line-height: 1.5; position: relative; padding-left: 34px; }
+  .priv-feats .check { background: var(--ink); color: var(--cream); position: absolute; left: 0; top: 2px; }
+  .form-card {
+    background: var(--cream); border: 2.5px solid var(--ink);
+    border-radius: var(--radius); padding: 32px; box-shadow: 8px 8px 0 0 var(--ink);
+  }
+  .form-card h3 { font-family: var(--block); font-size: 22px; margin-bottom: 6px; }
+  .form-card .sub { color: var(--ink-soft); margin-bottom: 22px; font-size: 14px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .form-row.full { grid-template-columns: 1fr; }
+  .field label { display: block; font-family: var(--block); font-size: 11px; letter-spacing: .12em; margin-bottom: 6px; }
+  .field input, .field select, .field textarea {
+    width: 100%; background: var(--white); border: 2px solid var(--ink);
+    border-radius: 10px; padding: 12px 14px;
+    font-family: var(--body); font-size: 15px; color: var(--ink);
+    transition: box-shadow .15s; appearance: none;
+  }
+  .field textarea { resize: vertical; min-height: 90px; }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: none; box-shadow: 4px 4px 0 0 var(--orange);
+  }
+  .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    background: var(--white); border: 2px solid var(--ink);
+    border-radius: 999px; padding: 8px 14px;
+    font-family: var(--block); font-size: 11px; letter-spacing: .08em;
+    transition: background .15s; cursor: pointer;
+  }
+  .chip.active, .chip:hover { background: var(--orange); }
+  .form-submit { margin-top: 18px; width: 100%; justify-content: center; }
+  .form-success { background: var(--ink); color: var(--cream); border-radius: 16px; padding: 28px; text-align: center; display: none; }
+  .form-success.show { display: block; }
+  .form-success .em { font-family: var(--display); font-size: 44px; color: var(--orange); transform: skewX(-7deg); display: inline-block; }
+  .form-success p { color: rgba(251,239,217,.8); margin-top: 6px; }
+
+  /* ============ TESTIMONIALS ============ */
+  .testis { background: var(--cream-deep); }
+  .test-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .test { background: var(--cream); border: 2.5px solid var(--ink); border-radius: var(--radius); padding: 26px; position: relative; }
+  .test:nth-child(2) { background: var(--white); transform: rotate(.6deg); }
+  .test:nth-child(3) { transform: rotate(-.5deg); }
+  .quote-mark { font-family: var(--display); color: var(--orange); font-size: 80px; line-height: .5; position: absolute; top: 22px; right: 22px; opacity: .9; }
+  .test .stars { color: var(--orange); font-size: 16px; letter-spacing: 2px; margin-bottom: 12px; }
+  .test p { font-size: 16px; }
+  .test .who { margin-top: 18px; font-family: var(--block); font-size: 12px; letter-spacing: .1em; }
+  .test .who span { color: var(--ink-soft); margin-left: 4px; font-family: var(--body); font-weight: 500; letter-spacing: 0; }
+
+  /* ============ MASCOTTE ACCENTS ============ */
+  .priv-mascotte {
+    position: absolute;
+    right: clamp(-10px, 2vw, 40px);
+    bottom: -6px;
+    width: clamp(120px, 16vw, 220px);
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+    transform: rotate(-5deg);
+    filter: drop-shadow(0 14px 22px rgba(42,21,5,.2));
+  }
+  .footer-mascotte {
+    height: 70px;
+    width: auto;
+    display: block;
+    margin-top: 18px;
+  }
+  @media (max-width: 900px) {
+    .priv-mascotte { width: 110px; opacity: .92; right: 4px; }
+  }
+
+  /* ============ FOOTER ============ */
+  footer { background: var(--ink); color: var(--cream); padding: 64px 0 28px; position: relative; overflow: hidden; }
+  .foot-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; align-items: start; }
+  .footer-logo { height: 80px; width: auto; display: block; object-fit: contain; filter: brightness(0) invert(1); margin-bottom: 4px; }
+  .foot-brand .slog { margin-top: 14px; font-family: "Gluten", system-ui, cursive; font-weight: 800; font-size: 26px; letter-spacing: -.01em; color: var(--yellow); }
+  .foot h4 { font-family: var(--block); font-size: 12px; letter-spacing: .16em; color: var(--orange); margin-bottom: 14px; }
+  .foot ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .foot ul a { color: rgba(251,239,217,.8); font-size: 14px; }
+  .foot ul a:hover { color: var(--cream); }
+  .foot-bot {
+    margin-top: 48px; padding-top: 22px;
+    border-top: 1px solid rgba(251,239,217,.15);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: rgba(251,239,217,.6);
+    flex-wrap: wrap; gap: 8px;
+  }
+  .socials { display: flex; gap: 10px; }
+  .socials a {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: rgba(251,239,217,.08);
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s, color .15s;
+    font-family: var(--block); font-size: 12px;
+  }
+  .socials a:hover { background: var(--orange); color: var(--ink); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 900px) {
+    .pillars, .menu-grid, .locs, .priv-grid, .test-grid, .foot-top, .triptych { grid-template-columns: 1fr; }
+    .reel-row { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .form-row { grid-template-columns: 1fr; }
+    .section { padding: 72px 0; }
+    .menu-tabs { display: flex; flex-wrap: wrap; justify-content: center; max-width: 100%; gap: 4px; }
+    .gallery-item { width: 190px; }
+    .gallery-item img { height: 236px; }
+    .menu-tab { padding: 9px 15px; font-size: 12px; }
+    .hero { height: calc(100svh - 78px); min-height: 480px; padding: 24px 0; gap: 18px; }
+    .tri { border-right: none; border-bottom: 2px dashed rgba(251,239,217,.22); }
+    .tri:last-child { border-bottom: none; }
+  }
+  @media (max-width: 560px) {
+    .reel-row, .menu-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ============ WAVE SEPARATORS ============ */
+  .wave-sep {
+    display: block;
+    height: 70px;
+    overflow: hidden;
+    line-height: 0;
+    position: relative;
+    margin-top: -1px;
+  }
+  .wave-sep svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ============ SCROLL TRUCK ============ */
+  .truck-journey {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 210px;
+    pointer-events: none;
+    z-index: 8;
+    overflow: visible;
+  }
+  .journey-svg {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+  .scrolltruck {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 150px;
+    transform-origin: 50% 100%;
+    will-change: transform;
+  }
+  .truck-inner {
+    width: 100%;
+    position: relative;
+    filter: drop-shadow(0 -5px 14px rgba(42,21,5,0.24));
+  }
+  .truck-inner img { width: 100%; display: block; }
+  .truck-tag {
+    position: absolute;
+    top: 16px; left: 50%;
+    transform: translateX(-50%);
+    background: #ff6a1a;
+    border: 2px solid #2a1505;
+    border-radius: 8px;
+    padding: 4px 8px;
+    text-align: center;
+    white-space: nowrap;
+    box-shadow: 2px 2px 0 #2a1505;
+    z-index: 1;
+  }
+  .truck-logo-img { height: 28px; width: auto; display: block; object-fit: contain; }
+
+</style>
+</head>
+<body>
+
+<!-- Truck journey -->
+<div class="truck-journey" aria-hidden="true">
+  <svg class="journey-svg" viewBox="0 0 1440 210" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="pathReveal" clipPathUnits="userSpaceOnUse">
+        <rect id="revealRect" x="0" y="-10" width="0" height="230"/>
+      </clipPath>
+    </defs>
+    <!-- Road surface -->
+    <path d="M 0,182 C 180,122 390,195 640,158 C 890,121 1060,192 1260,150 C 1360,128 1420,165 1440,155"
+      fill="none" stroke="#2a1505" stroke-width="6" stroke-opacity="0.07"/>
+    <!-- Dotted centre line (progressively revealed as truck rolls) -->
+    <path id="truckPath"
+      d="M 0,182 C 180,122 390,195 640,158 C 890,121 1060,192 1260,150 C 1360,128 1420,165 1440,155"
+      fill="none"
+      stroke="#ff6a1a"
+      stroke-width="2.5"
+      stroke-dasharray="14 9"
+      stroke-linecap="round"
+      stroke-opacity="0.55"
+      clip-path="url(#pathReveal)"/>
+  </svg>
+  <div class="scrolltruck" id="scrolltruck">
+    <div class="truck-inner" id="truckInner">
+      <img src="uploads/truck.png" alt="" style="transform:scaleX(-1)" />
+    </div>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div class="texture-grain" aria-hidden="true"></div>
+<div id="progressBar"></div>
+
+<!-- Custom cursor -->
+<div id="cursorDot" class="cursor-dot"></div>
+<div id="cursorRing" class="cursor-ring"></div>
+
+<!-- =================== NAV =================== -->
+<nav class="nav" id="nav">
+  <div class="wrap nav-inner">
+    <a href="#" class="brand" aria-label="Rollin' Protéines">
+      <img src="uploads/logo.png" alt="Rollin' Protéines" class="brand-logo" />
+    </a>
+    <nav class="nav-links" aria-label="Navigation principale">
+      <a href="#concept">Le concept</a>
+      <a href="#menu">Menu</a>
+      <a href="#series">La série</a>
+      <a href="#galerie">Galerie</a>
+      <a href="#locations">Où nous trouver</a>
+      <a href="#privatiser">Privatiser</a>
+    </nav>
+    <div class="nav-tools">
+      <div class="lang-toggle" role="group" aria-label="Langue / Language">
+        <button type="button" data-lang="fr" class="active" aria-pressed="true">FR</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="burger" id="burger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="menuOverlay">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- =================== MENU OVERLAY =================== -->
+<div class="menu-overlay" id="menuOverlay" role="dialog" aria-modal="true" aria-label="Menu">
+  <a href="#concept">Le concept</a>
+  <a href="#menu">Menu</a>
+  <a href="#series">La série</a>
+  <a href="#galerie">Galerie</a>
+  <a href="#locations">Où nous trouver</a>
+  <a href="#privatiser">Privatiser</a>
+  <a href="#devis" class="menu-cta">Demander un devis</a>
+  <div class="menu-foot">Good vibes · Good food · Good gains.</div>
+</div>
+
+<!-- =================== HERO =================== -->
+<header class="hero">
+  <div class="hero-inner">
+    <img src="uploads/Logo-vignette-orange.png" alt="Rollin' Protéines" class="hero-vignette" />
+    <h1 class="hero-title">Le food truck qui te veut <em>du bien</em>.</h1>
+    <p class="lead">
+      Bowls, plats, desserts healthy &amp; smoothies.
+    </p>
+    <div class="cta-row">
+      <a href="#menu" class="btn btn-primary">Voir le menu</a>
+      <a href="#locations" class="btn btn-ghost">Nous trouver →</a>
+    </div>
+  </div>
+</header>
+
+<!-- =================== CONCEPT =================== -->
+<section class="section" id="concept" style="position:relative;overflow:hidden;">
+  <div class="wrap">
+    <img src="uploads/mascotte.png" alt="" class="concept-mascotte" aria-hidden="true" />
+    <div class="section-head">
+      <span class="label">Le concept</span>
+      <h2 class="h2">La street food qu'on aime,<br/><em>les protéines qu'on cherche.</em></h2>
+    </div>
+    <div class="pillars">
+      <a href="#menu" class="pillar" data-menu-tab="bowls" aria-label="Voir les bowls dans le menu">
+        <span class="num" aria-hidden="true">1</span>
+        <div class="ico" aria-hidden="true">🍲</div>
+        <h3>Bowls</h3>
+        <p>Pour tous les goûts, frais ou chauds, riches en protéines et préparés avec des ingrédients de qualité.</p>
+        <span class="pillar-cta" aria-hidden="true">Voir au menu →</span>
+      </a>
+      <a href="#menu" class="pillar" data-menu-tab="smoothies" aria-label="Voir les smoothies dans le menu">
+        <span class="num" aria-hidden="true">2</span>
+        <div class="ico" aria-hidden="true">🥤</div>
+        <h3>Smoothies frais</h3>
+        <p>Boost-le avec les compléments Nutripure de ton choix : whey, créatine, collagène.</p>
+        <span class="pillar-cta" aria-hidden="true">Voir au menu →</span>
+      </a>
+      <a href="#menu" class="pillar" data-menu-tab="desserts" aria-label="Voir les desserts dans le menu">
+        <span class="num" aria-hidden="true">3</span>
+        <div class="ico" aria-hidden="true">🍪</div>
+        <h3>Desserts healthy</h3>
+        <p>Gourmands et élaborés avec des produits non raffinés.</p>
+        <span class="pillar-cta" aria-hidden="true">Voir au menu →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Wave 3: concept cream → triptych ink -->
+<div class="wave-sep" style="background:#2a1505;" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,55 C480,5 960,70 1440,15 L1440,0 L0,0 Z" fill="#fbefd9"/>
+  </svg>
+</div>
+
+<!-- =================== TRIPTYCH =================== -->
+<section class="section" style="padding-top:0;background:#2a1505;">
+  <div class="wrap">
+    <div class="triptych">
+      <div class="tri">
+        <div class="label-w">01 / VIBES</div>
+        <div class="big">Good vibes.</div>
+        <p>Une caravane rétro, une mascotte. On vient manger mais surtout passer un bon moment.</p>
+      </div>
+      <div class="tri">
+        <div class="label-w">02 / FOOD</div>
+        <div class="big">Good food.</div>
+        <p>Recettes développées avec une nutritionniste. Produits locaux.</p>
+      </div>
+      <div class="tri">
+        <div class="label-w">03 / GAINS</div>
+        <div class="big">Good gains.</div>
+        <p>Chaque plat affiche kcal, protéines, glucides et lipides. Tu sais ce que tu manges, tu sais ce que tu gagnes.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =================== MENU =================== -->
+<section class="section menu-section" id="menu">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label">Le menu</span>
+      <h2 class="h2">À la carte, <em>healthy &amp; gourmand.</em></h2>
+    </div>
+    <div class="menu-tabs" role="tablist" id="menuTabs">
+      <button class="menu-tab active" role="tab" aria-selected="true" data-tab="bowls">Bowls</button>
+      <button class="menu-tab" role="tab" aria-selected="false" data-tab="smoothies">Smoothies</button>
+      <button class="menu-tab" role="tab" aria-selected="false" data-tab="desserts">Desserts</button>
+      <button class="menu-tab" role="tab" aria-selected="false" data-tab="boissons">Boissons</button>
+      <button class="menu-tab" role="tab" aria-selected="false" data-tab="menus">Menus</button>
+    </div>
+    <div class="menu-grid" id="menuGrid" role="tabpanel"></div>
+    <div class="menu-notes" id="menuNotes"></div>
+  </div>
+</section>
+
+<!-- Wave 4: menu ink → series cream -->
+<div class="wave-sep" style="background:#fbefd9;" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,20 C600,75 900,0 1440,50 L1440,0 L0,0 Z" fill="#2a1505"/>
+  </svg>
+</div>
+
+<!-- =================== SERIES =================== -->
+<section class="section series" id="series" style="position:relative;overflow:hidden;">
+  <div class="wrap">
+    <div class="sect-deco" aria-hidden="true" style="position:absolute;bottom:-100px;left:-80px;width:340px;height:340px;border-radius:50%;background:var(--red);opacity:.07;pointer-events:none"></div>
+    <div class="section-head">
+      <span class="label">La série Instagram</span>
+      <h2 class="h2">Je transforme cette caravane<br/><em>en food truck.</em></h2>
+      <p style="margin-top:18px; max-width:640px; color:var(--ink-soft); font-size:18px;">
+        Suis le chantier épisode par épisode sur <strong><a href="https://www.instagram.com/rollinproteines/" target="_blank" rel="noopener" style="color:var(--orange);">@rollinproteines</a></strong>. De la rouille au bowl, on partage tout — les galères incluses.
+      </p>
+    </div>
+    <div class="reel-row">
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DVy5JLxDHOm/" data-instgrm-version="14"></blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DW6y7TNjNRj/" data-instgrm-version="14"></blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXFGKbODJ-p/" data-instgrm-version="14"></blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXZx3j9jqLt/" data-instgrm-version="14"></blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXw6KMbsHKo/" data-instgrm-version="14"></blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DZSkqugszI_/" data-instgrm-version="14"></blockquote>
+    </div>
+    <noscript><p style="text-align:center;color:var(--ink-soft);margin-top:18px;">Active JavaScript pour voir les vidéos, ou retrouve-les sur <a href="https://www.instagram.com/rollinproteines/" target="_blank" rel="noopener">@rollinproteines</a>.</p></noscript>
+  </div>
+</section>
+
+<!-- =================== GALERIE =================== -->
+<section class="section gallery-section" id="galerie">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label">La galerie</span>
+      <h2 class="h2">Nos bowls, <em>en vrai.</em></h2>
+    </div>
+    <div class="gallery-marquee" aria-label="Galerie photos">
+      <div class="gm-row">
+        <div class="gm-track">
+          <figure class="gallery-item" style="--r:-3deg"><img src="uploads/food/gallery/g1.jpg" alt="Bowl Rollin' Protéines devant les fleurs" loading="lazy" /><figcaption>fait maison</figcaption></figure>
+          <figure class="gallery-item" style="--r:2.5deg"><img src="uploads/food/gallery/g3.jpg" alt="Bowl protéiné vu du dessus" loading="lazy" /><figcaption>healthy</figcaption></figure>
+          <figure class="gallery-item" style="--r:-1.5deg"><img src="uploads/food/gallery/g5.jpg" alt="Bowl coloré vu du dessus" loading="lazy" /><figcaption>coloré</figcaption></figure>
+          <figure class="gallery-item" style="--r:3deg"><img src="uploads/food/gallery/g7.jpg" alt="Plusieurs bowls Rollin' Protéines" loading="lazy" /><figcaption>gourmand</figcaption></figure>
+          <figure class="gallery-item" style="--r:-3deg" aria-hidden="true"><img src="uploads/food/gallery/g1.jpg" alt="" loading="lazy" /><figcaption>fait maison</figcaption></figure>
+          <figure class="gallery-item" style="--r:2.5deg" aria-hidden="true"><img src="uploads/food/gallery/g3.jpg" alt="" loading="lazy" /><figcaption>healthy</figcaption></figure>
+          <figure class="gallery-item" style="--r:-1.5deg" aria-hidden="true"><img src="uploads/food/gallery/g5.jpg" alt="" loading="lazy" /><figcaption>coloré</figcaption></figure>
+          <figure class="gallery-item" style="--r:3deg" aria-hidden="true"><img src="uploads/food/gallery/g7.jpg" alt="" loading="lazy" /><figcaption>gourmand</figcaption></figure>
+        </div>
+      </div>
+      <div class="gm-row gm-row--rev">
+        <div class="gm-track">
+          <figure class="gallery-item" style="--r:2.5deg"><img src="uploads/food/gallery/g2.jpg" alt="Bowl poulet et œuf devant les fleurs" loading="lazy" /><figcaption>protéiné</figcaption></figure>
+          <figure class="gallery-item" style="--r:-2.5deg"><img src="uploads/food/gallery/g4.jpg" alt="Bowl protéiné garni" loading="lazy" /><figcaption>frais</figcaption></figure>
+          <figure class="gallery-item" style="--r:1.5deg"><img src="uploads/food/gallery/g6.jpg" alt="Bowl avec œuf mollet" loading="lazy" /><figcaption>du bien</figcaption></figure>
+          <figure class="gallery-item" style="--r:-3deg"><img src="uploads/food/gallery/g8.jpg" alt="Bowls sur nappe rayée" loading="lazy" /><figcaption>à partager</figcaption></figure>
+          <figure class="gallery-item" style="--r:2.5deg" aria-hidden="true"><img src="uploads/food/gallery/g2.jpg" alt="" loading="lazy" /><figcaption>protéiné</figcaption></figure>
+          <figure class="gallery-item" style="--r:-2.5deg" aria-hidden="true"><img src="uploads/food/gallery/g4.jpg" alt="" loading="lazy" /><figcaption>frais</figcaption></figure>
+          <figure class="gallery-item" style="--r:1.5deg" aria-hidden="true"><img src="uploads/food/gallery/g6.jpg" alt="" loading="lazy" /><figcaption>du bien</figcaption></figure>
+          <figure class="gallery-item" style="--r:-3deg" aria-hidden="true"><img src="uploads/food/gallery/g8.jpg" alt="" loading="lazy" /><figcaption>à partager</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave 5: series cream → locations cream-deep -->
+<div class="wave-sep" style="background:#f5e2bf;" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C360,10 1080,65 1440,30 L1440,0 L0,0 Z" fill="#fbefd9"/>
+  </svg>
+</div>
+
+<!-- =================== LOCATIONS =================== -->
+<section class="section testis" id="locations">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label">Où nous trouver</span>
+      <h2 class="h2">Sur les routes <em>de Nantes</em> et alentours.</h2>
+    </div>
+    <div class="locs">
+      <div class="map-card" role="img" aria-label="Carte de l'emplacement">
+        <div class="map-bg" aria-hidden="true"></div>
+        <div class="map-river" aria-hidden="true"></div>
+        <div class="map-legend">NANTES &amp; AUTOUR</div>
+        <div class="pin active" style="left:42%;top:72%;" tabindex="0" role="button" aria-label="Limit.O — La Chevrolière"><span class="tip">Limit.O · La Chevrolière</span></div>
+      </div>
+      <div class="loc-list" id="locList">
+        <div class="loc-item active" tabindex="0" role="button">
+          <span class="day">MARDI</span>
+          <div><div class="place">Limit.O — 28 rue de la Guillauderie, 44118 La Chevrolière</div><div class="hours">11h45 — 14h00</div></div>
+        </div>
+        <div class="loc-item" tabindex="0" role="button">
+          <span class="day">ÉVÈNEMENTS</span>
+          <div><div class="place">Évènements &amp; privatisation</div><div class="hours">SUR RÉSERVATION</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave 6: locations cream-deep → privatize orange -->
+<div class="wave-sep" style="background:#ff6a1a;" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,35 C240,70 480,0 720,40 C960,70 1200,0 1440,30 L1440,0 L0,0 Z" fill="#f5e2bf"/>
+  </svg>
+</div>
+
+<!-- =================== PRIVATIZE =================== -->
+<section class="section privatize" id="privatiser" style="position:relative;overflow:hidden;">
+  <div class="wrap">
+    <div class="priv-grid">
+      <div class="priv-left">
+        <span class="label">Privatiser le food truck</span>
+        <h2 class="h2">On vient chez toi,<br/><em>on fait le show.</em></h2>
+        <p style="margin-top:18px;">Anniversaire, séminaire d'entreprise, mariage, soirée de salle de sport, after-run, lancement de produit&nbsp;— on déplace la caravane et on cuisine sur place.</p>
+        <ul class="priv-feats">
+          <li><span class="check" aria-hidden="true">✓</span> À partir de <strong>20 personnes</strong></li>
+          <li><span class="check" aria-hidden="true">✓</span> Devis sous <strong>24h</strong>, un interlocuteur unique</li>
+          <li><span class="check" aria-hidden="true">✓</span> Mise en place &amp; clean-up inclus</li>
+          <li><span class="check" aria-hidden="true">✓</span> Options vegan &amp; sans gluten</li>
+        </ul>
+      </div>
+      <div id="devis" class="form-card">
+        <h3>Demander un devis</h3>
+        <p class="sub">Réponse personnalisée sous un jour ouvré.</p>
+        <form id="devisForm" novalidate>
+          <div class="form-row">
+            <div class="field"><label for="fname">Prénom</label><input id="fname" type="text" required placeholder="Jules" autocomplete="given-name" /></div>
+            <div class="field"><label for="lname">Nom</label><input id="lname" type="text" required placeholder="Marchand" autocomplete="family-name" /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="email">Email</label><input id="email" type="email" required placeholder="jules@email.com" autocomplete="email" /></div>
+            <div class="field"><label for="phone">Téléphone</label><input id="phone" type="tel" placeholder="06 ·· ·· ·· ··" autocomplete="tel" /></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label for="evdate">Date</label><input id="evdate" type="date" required /></div>
+            <div class="field"><label for="people">Nombre de personnes</label><input id="people" type="number" min="30" required placeholder="50" /></div>
+          </div>
+          <div class="form-row full">
+            <div class="field">
+              <label>Type d'évènement</label>
+              <div class="chips" id="evChips" role="group">
+                <button type="button" class="chip" data-v="entreprise">Séminaire</button>
+                <button type="button" class="chip" data-v="anniv">Anniversaire</button>
+                <button type="button" class="chip" data-v="sportif">Évènement sportif</button>
+                <button type="button" class="chip" data-v="mariage">Mariage</button>
+                <button type="button" class="chip" data-v="evenement">Évènement</button>
+                <button type="button" class="chip" data-v="autre">Autre</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="field"><label for="msg">Un mot sur ton projet&nbsp;?</label><textarea id="msg" placeholder="Lieu, horaires, attentes spéciales…"></textarea></div>
+          </div>
+          <button type="submit" class="btn btn-red form-submit">Envoyer ma demande →</button>
+        </form>
+        <div class="form-success" id="formSuccess" role="alert">
+          <div class="em">Merci&nbsp;!</div>
+          <p>On revient vers toi sous 24h avec un devis perso.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave 7: privatize orange → testimonials cream -->
+<div class="wave-sep" style="background:#fbefd9;" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,40 C360,0 1080,70 1440,20 L1440,0 L0,0 Z" fill="#ff6a1a"/>
+  </svg>
+</div>
+
+<!-- =================== TESTIMONIALS =================== -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="label">Ils en parlent</span>
+      <h2 class="h2"><em>Ça roule</em> déjà fort.</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test">
+        <div class="quote-mark" aria-hidden="true">"</div>
+        <div class="stars" aria-label="5 étoiles">★★★★★</div>
+        <p>«&nbsp;Enfin un truck où je peux manger sans flinguer ma sèche. Les shakes banana-peanut sont une dinguerie.&nbsp;»</p>
+        <div class="who">CLARA M. <span>· coach sportive, Nantes</span></div>
+      </div>
+      <div class="test">
+        <div class="quote-mark" aria-hidden="true">"</div>
+        <div class="stars" aria-label="5 étoiles">★★★★★</div>
+        <p>«&nbsp;On a privatisé Rollin' pour les 1 an de la salle, 80 personnes. Concept fou, équipe au top. Les goodies sont partis en 20 min.&nbsp;»</p>
+        <div class="who">THOMAS L. <span>· Iron Gym Carquefou</span></div>
+      </div>
+      <div class="test">
+        <div class="quote-mark" aria-hidden="true">"</div>
+        <div class="stars" aria-label="5 étoiles">★★★★★</div>
+        <p>«&nbsp;La caravane est une œuvre d'art à elle seule, et le bowl poulet patate douce m'a sauvé la vie après ma run.&nbsp;»</p>
+        <div class="who">SARAH B. <span>· cliente régulière</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Wave 8: testimonials cream → footer ink -->
+<div class="wave-sep" style="background:#2a1505;" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,70 480,0 720,35 C960,70 1200,0 1440,40 L1440,0 L0,0 Z" fill="#fbefd9"/>
+  </svg>
+</div>
+
+<!-- =================== FOOTER =================== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <img src="uploads/logo.png" alt="Rollin' Protéines" class="footer-logo" />
+        <div class="slog">Good vibes, Good food, Good gains.</div>
+        <img src="uploads/mascotte.png" alt="" class="footer-mascotte" aria-hidden="true" />
+      </div>
+      <div class="foot">
+        <h4>NAVIGUER</h4>
+        <ul>
+          <li><a href="#concept">Le concept</a></li>
+          <li><a href="#menu">Menu</a></li>
+          <li><a href="#series">La série</a></li>
+          <li><a href="#locations">Où nous trouver</a></li>
+        </ul>
+      </div>
+      <div class="foot">
+        <h4>RÉSERVER</h4>
+        <ul>
+          <li><a href="#privatiser">Privatiser le truck</a></li>
+          <li><a href="#devis">Demander un devis</a></li>
+          <li><a href="tel:+33672062739">06 72 06 27 39</a></li>
+        </ul>
+      </div>
+      <div class="foot">
+        <h4>NOUS SUIVRE</h4>
+        <div class="socials">
+          <a href="https://www.instagram.com/rollinproteines/" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="5.5" ry="5.5"/>
+              <circle cx="12" cy="12" r="4.2"/>
+              <circle cx="17.6" cy="6.4" r="1.2" fill="currentColor" stroke="none"/>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/profile.php?id=61589955754876" target="_blank" rel="noopener" title="Facebook" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" width="19" height="19" fill="currentColor" aria-hidden="true">
+              <path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.52 1.49-3.92 3.78-3.92 1.1 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.78-1.63 1.57v1.89h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94z"/>
+            </svg>
+          </a>
+          <a href="https://www.tiktok.com/@tonsuucre" target="_blank" rel="noopener" title="TikTok" aria-label="TikTok">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+              <path d="M16.6 5.82a4.28 4.28 0 0 1-1.86-3.07V2.3h-3.1v12.36a2.6 2.6 0 1 1-2.6-2.6c.27 0 .53.04.78.12V9.1a5.7 5.7 0 0 0-.78-.05 5.65 5.65 0 1 0 5.65 5.65V8.6a7.34 7.34 0 0 0 4.27 1.37V6.87a4.28 4.28 0 0 1-2.36-1.05z"/>
+            </svg>
+          </a>
+        </div>
+        <p style="margin-top:14px; font-size:13px; color:rgba(251,239,217,.6);">@rollinproteines</p>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>
+        © 2026 Rollin' Protéines — Nantes, France ·
+        <a href="mentions-legales.html">Mentions légales</a> ·
+        <a href="politique-de-confidentialite.html">Confidentialité</a>
+      </div>
+      <div>Logo &amp; mascotte&nbsp;: @horae.atelier · Wrap&nbsp;: @sunnyside.creations · Site&nbsp;: <a href="https://noanweb.com" target="_blank" rel="noopener">NoanWeb</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== LIBS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script async src="https://www.instagram.com/embed.js"></script>
+
+<script>
+/* ================================================================
+   I18N — FR / EN
+================================================================ */
+window.RP_LANG = 'fr';
+const I18N_EN = {
+  // nav + overlay + footer links
+  "Le concept": "The concept",
+  "Menu": "Menu",
+  "La série": "The series",
+  "Galerie": "Gallery",
+  "La galerie": "The gallery",
+  "Nos bowls, en vrai.": "Our bowls, <em>for real.</em>",
+  "Où nous trouver": "Find us",
+  "Privatiser": "Private events",
+  "Demander un devis": "Request a quote",
+  "Privatiser le truck": "Book the truck",
+  // hero
+  "Le food truck protéiné de Nantes.": 'The <em>protein</em> food truck of Nantes.',
+  "Bowls, plats, desserts healthy & smoothies.":
+    "Bowls, mains, healthy desserts & smoothies.",
+  "Voir le menu": "See the menu",
+  "Nous trouver →": "Find us →",
+  // concept
+  "La street food qu'on aime,les protéines qu'on cherche.": "The street food we love,<br/><em>the protein we're after.</em>",
+  "Bowls": "Bowls",
+  "Pour tous les goûts, frais ou chauds, riches en protéines et préparés avec des ingrédients de qualité.":
+    "For every taste, fresh or warm, packed with protein and made with quality ingredients.",
+  "Smoothies frais": "Fresh smoothies",
+  "Boost-le avec les compléments Nutripure de ton choix : whey, créatine, collagène.":
+    "Boost it with the Nutripure supplements of your choice: whey, creatine, collagen.",
+  "Desserts healthy": "Healthy desserts",
+  "Gourmands et élaborés avec des produits non raffinés.":
+    "Indulgent and made with unrefined ingredients.",
+  "Voir au menu →": "See it on the menu →",
+  // triptych
+  "Une caravane rétro, une mascotte. On vient manger mais surtout passer un bon moment.":
+    "A retro caravan, a mascot. You come to eat — but mostly to have a good time.",
+  "Recettes développées avec une nutritionniste. Produits locaux.":
+    "Recipes developed with a nutritionist. Local produce.",
+  "Chaque plat affiche kcal, protéines, glucides et lipides. Tu sais ce que tu manges, tu sais ce que tu gagnes.":
+    "Every dish shows kcal, protein, carbs and fat. You know what you eat, you know what you gain.",
+  // menu
+  "Le menu": "The menu",
+  "À la carte, healthy & gourmand.": 'À la carte, <em>healthy &amp; gourmet.</em>',
+  "Boissons": "Drinks",
+  // series
+  "La série Instagram": "The Instagram series",
+  "Je transforme cette caravaneen food truck.": "I'm turning this caravan<br/><em>into a food truck.</em>",
+  "Suis le chantier épisode par épisode sur @rollinproteines. De la rouille au bowl, on partage tout — les galères incluses.":
+    "Follow the build episode by episode on <strong><a href=\"https://www.instagram.com/rollinproteines/\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--orange);\">@rollinproteines</a></strong>. From rust to the bowl, we share it all — the struggles included.",
+  "JE TRANSFORME CETTE CARAVANE ENFOOD TRUCK": "<b>I'M TURNING THIS CARAVAN INTO A</b>FOOD TRUCK",
+  "Pov : t'achètes une vieille caravane à 600€": "POV: you buy an old caravan for €600",
+  "On démonte tout l'intérieur": "We strip out the whole interior",
+  "Le wrap arrive enfin": "The wrap finally arrives",
+  "Premier shake servi sur place": "First shake served on site",
+  "Le food truck est enfin prêt !": "The food truck is finally ready!",
+  "ÉPISODE 1": "EPISODE 1",
+  "ÉPISODE 2": "EPISODE 2",
+  "ÉPISODE 3": "EPISODE 3",
+  "ÉPISODE 4": "EPISODE 4",
+  "ÉPISODE 5": "EPISODE 5",
+  // locations
+  "Sur les routes de Nantes et alentours.": 'On the roads <em>of Nantes</em> and around.',
+  "NANTES & AUTOUR": "NANTES & AROUND",
+  "LUN": "MON", "MAR": "TUE", "MARDI": "TUESDAY", "MER": "WED", "JEU": "THU", "VEN": "FRI", "WEEK-END": "WEEKEND", "ÉVÈNEMENTS": "EVENTS",
+  "Carquefou — Zone d'activité": "Carquefou — Business park",
+  "Évènements & privatisation": "Events & private hire",
+  "SUR RÉSERVATION": "BY RESERVATION",
+  "Nos emplacements arrivent bientôt !": "Our spots are coming soon!",
+  "On finalise notre tournée sur Nantes et alentours. Les jours et les spots seront annoncés très vite — suis-nous sur Instagram pour être au courant en premier.":
+    "We're finalising our route across Nantes and around. Days and spots will be announced very soon — follow us on Instagram to be the first to know.",
+  "Suivre @rollinproteines": "Follow @rollinproteines",
+  // privatize
+  "Privatiser le food truck": "Book the food truck",
+  "On vient chez toi,on fait le show.": 'We come to you,<br/><em>we put on a show.</em>',
+  "Anniversaire, séminaire d'entreprise, mariage, soirée de salle de sport, after-run, lancement de produit — on déplace la caravane et on cuisine sur place.":
+    "Birthday, corporate seminar, wedding, gym party, after-run, product launch — we bring the caravan and cook on site.",
+  "✓ À partir de 20 personnes": '<span class="check" aria-hidden="true">✓</span> From <strong>20 people</strong>',
+  "✓ Devis sous 24h, un interlocuteur unique": '<span class="check" aria-hidden="true">✓</span> Quote within <strong>24h</strong>, a single contact',
+  "✓ Mise en place & clean-up inclus": '<span class="check" aria-hidden="true">✓</span> Setup &amp; clean-up included',
+  "✓ Options vegan & sans gluten": '<span class="check" aria-hidden="true">✓</span> Vegan &amp; gluten-free options',
+  "Réponse personnalisée sous un jour ouvré.": "Personalized reply within one business day.",
+  "Prénom": "First name", "Nom": "Last name", "Email": "Email", "Téléphone": "Phone",
+  "Date": "Date", "Nombre de personnes": "Number of guests", "Type d'évènement": "Event type",
+  "Un mot sur ton projet ?": "A word about your project?",
+  "Séminaire": "Seminar", "Anniversaire": "Birthday", "Évènement sportif": "Sports event", "Mariage": "Wedding", "Évènement": "Event", "Autre": "Other",
+  "Envoyer ma demande →": "Send my request →",
+  "Merci !": "Thank you!",
+  "On revient vers toi sous 24h avec un devis perso.": "We'll get back to you within 24h with a custom quote.",
+  // testimonials
+  "Ils en parlent": "What they say",
+  "Ça roule déjà fort.": "<em>It's rolling</em> strong already.",
+  "« Enfin un truck où je peux manger sans flinguer ma sèche. Les shakes banana-peanut sont une dinguerie. »":
+    "“Finally a truck where I can eat without wrecking my cut. The banana-peanut shakes are insane.”",
+  "CLARA M. · coach sportive, Nantes": 'CLARA M. <span>· fitness coach, Nantes</span>',
+  "« On a privatisé Rollin' pour les 1 an de la salle, 80 personnes. Concept fou, équipe au top. Les goodies sont partis en 20 min. »":
+    "“We booked Rollin' for the gym's 1st anniversary, 80 people. Crazy concept, top team. The goodies were gone in 20 min.”",
+  "THOMAS L. · Iron Gym Carquefou": 'THOMAS L. <span>· Iron Gym Carquefou</span>',
+  "« La caravane est une œuvre d'art à elle seule, et le bowl poulet patate douce m'a sauvé la vie après ma run. »":
+    "“The caravan is a work of art on its own, and the chicken sweet-potato bowl saved my life after my run.”",
+  "SARAH B. · cliente régulière": 'SARAH B. <span>· regular customer</span>',
+  // footer
+  "NAVIGUER": "BROWSE", "RÉSERVER": "BOOK", "NOUS SUIVRE": "FOLLOW US",
+  "Logo & mascotte : @horae.atelier · Wrap : @sunnyside.creations":
+    "Logo & mascot: @horae.atelier · Wrap: @sunnyside.creations",
+};
+
+const I18N_SELECTOR = [
+  '.nav-links a', '.menu-overlay a', '.menu-foot',
+  '.hero-title', '.hero .lead', '.cta-row a',
+  '.section-head .label', '.h2', '#concept .section-head p',
+  '.pillar h3', '.pillar p', '.pillar-cta', '.tri p',
+  '.menu-tab',
+  '#series .section-head p', '.reel .top', '.reel .sub', '.reel .ep',
+  '.map-legend', '.loc-item .day', '.loc-item .place', '.loc-item .hours',
+  '.loc-soon .em', '.loc-soon p', '.loc-soon .btn',
+  '.privatize .label', '.privatize > .wrap p', '.priv-feats li',
+  '.form-card h3', '.form-card .sub', '.field label', '#evChips .chip', '.form-submit',
+  '.form-success .em', '.form-success p',
+  '.test p', '.test .who',
+  'footer h4', 'footer a', '.foot-bot div'
+].join(',');
+
+function rpNorm(s) {
+  return s.replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+function rpTranslate(lang) {
+  window.RP_LANG = lang;
+  document.documentElement.lang = lang;
+  document.querySelectorAll(I18N_SELECTOR).forEach(el => {
+    if (el.dataset.rpFr === undefined) {
+      el.dataset.rpFr = el.innerHTML;
+      el.dataset.rpKey = rpNorm(el.textContent);
+    }
+    if (lang === 'en') {
+      const t = I18N_EN[el.dataset.rpKey];
+      if (t !== undefined) el.innerHTML = t;
+    } else {
+      el.innerHTML = el.dataset.rpFr;
+    }
+  });
+  // dynamic menu cards
+  if (typeof renderMenu === 'function') renderMenu(currentTab);
+  // eyebrow
+  const eb = document.getElementById('eyebrowText');
+  if (eb) eb.textContent = (lang === 'en') ? 'OPENING SOON — NANTES' : 'OUVERTURE BIENTÔT — NANTES';
+  // toggle button state
+  document.querySelectorAll('.lang-toggle button').forEach(b => {
+    const on = b.dataset.lang === lang;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
+}
+
+document.querySelectorAll('.lang-toggle button').forEach(b => {
+  b.addEventListener('click', () => rpTranslate(b.dataset.lang));
+});
+
+/* ================================================================
+   MENU DATA + RENDER
+================================================================ */
+const MENU = {
+  bowls: [
+    { name:"rollin' fuel", name_en:"rollin' fuel", desc:"Mix de riz, poulet bbq fumé-sucré, poivrons fondants, tomates cerises, mesclun, pickles d'oignons, feta.", desc_en:"Rice mix, smoky-sweet BBQ chicken, melting peppers, cherry tomatoes, mesclun, pickled onions, feta.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/fuel.jpg", imgpos:"center 42%", macros:[{label:"M",kcal:461,p:29,g:58,l:13,f:2},{label:"L",kcal:600,p:37,g:63,l:24,f:4}], ph:"bowl poulet bbq", ph_en:"BBQ chicken bowl" },
+    { name:"rollin' boost", name_en:"rollin' boost", desc:"Mix de riz, poulet façon pita, carottes râpées, chou rouge, pickles, mesclun, herbes fraîches, mélange de graines, copeaux de parmesan.", desc_en:"Rice mix, pita-style chicken, grated carrots, red cabbage, pickles, mesclun, fresh herbs, seed mix, parmesan shavings.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/PHOTOSbowlboost.jpeg", imgpos:"center 45%", macros:[{label:"M",kcal:365,p:34,g:41,l:7,f:3},{label:"L",kcal:660,p:52,g:71,l:21,f:7}], ph:"bowl poulet pita", ph_en:"pita chicken bowl" },
+    { name:"rollin' green", name_en:"rollin' green", desc:"Mix de riz, œufs, aubergines rôties en tranches, avocat fondant, fèves edamame crispy, pois chiches grillés.", desc_en:"Rice mix, eggs, roasted sliced eggplant, melting avocado, crispy edamame, grilled chickpeas.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/bowlzer.jpeg", imgpos:"center 42%", macros:[{label:"M",kcal:556,p:21,g:33,l:38,f:2},{label:"L",kcal:865,p:36,g:60,l:46,f:25}], ph:"bowl végétal", ph_en:"veggie bowl" },
+  ],
+  smoothies: [
+    { name:"fresh", name_en:"fresh", desc:"Framboise, myrtille, lait d'amande.", desc_en:"Raspberry, blueberry, almond milk.", price:"5.50€", badge:"", badge_en:"", macros:[{kcal:158,p:5,g:25,l:3,f:5}], ph:"smoothie rouge", ph_en:"red smoothie" },
+    { name:"passion", name_en:"passion", desc:"Mangue, passion, lait de coco.", desc_en:"Mango, passion fruit, coconut milk.", price:"5.50€", badge:"", badge_en:"", macros:[{kcal:168,p:1,g:35,l:2,f:1}], ph:"smoothie exotique", ph_en:"tropical smoothie" },
+    { name:"muscle up", name_en:"muscle up", desc:"Banane, beurre de cacahuète, skyr, lait.", desc_en:"Banana, peanut butter, skyr, milk.", price:"5.50€", badge:"BOOST PROT", badge_en:"PROTEIN BOOST", badgeCls:"green", macros:[{kcal:286,p:12,g:37,l:9,f:3}], ph:"smoothie crémeux", ph_en:"creamy smoothie" },
+  ],
+  desserts: [
+    { name:"granola crunchy", name_en:"crunchy granola", desc:"Skyr, granola au choix (flocon d'avoine sans gluten disponible), banane, fruits séchés.", desc_en:"Skyr, granola of your choice (gluten-free oats available), banana, dried fruit.", price:"4€", badge:"", badge_en:"", macros:[{kcal:256,p:16,g:40,l:4,f:4}], img:"uploads/food/granola-crunchy.jpeg", imgpos:"center 45%", ph:"granola skyr", ph_en:"granola & skyr" },
+    { name:"cookie du moment", name_en:"cookie of the moment", desc:"Le cookie maison du jour, toujours ultra gourmand.", desc_en:"The homemade cookie of the day, always ultra indulgent.", price:"3.50€", badge:"", badge_en:"", macros:[{kcal:200,p:9,g:20,l:19}], img:"uploads/food/cookie.jpeg", imgpos:"center 45%", ph:"cookie", ph_en:"cookie" },
+    { name:"energy balls (x2/10)", name_en:"energy balls (x2/10)", desc:"Beurre de cacahuète, avoine, baies de Goji.", desc_en:"Peanut butter, oats, Goji berries.", price:"3 / 12€", badge:"", badge_en:"", macros:[{label:"x1",kcal:92,p:2,g:20,l:2,f:2}], img:"uploads/food/energy-balls.jpeg", imgpos:"center 58%", ph:"energy balls", ph_en:"energy balls" },
+  ],
+  boissons: [
+    { name:"bouteille d'eau", name_en:"water bottle", desc:"Cristaline, Badois.", desc_en:"Cristaline, Badois.", price:"2€", badge:"", badge_en:"", ph:"eau", ph_en:"water" },
+    { name:"kombucha maison", name_en:"house kombucha", desc:"Fermenté maison, légèrement pétillant.", desc_en:"House-fermented, lightly sparkling.", price:"2€", badge:"MAISON", badge_en:"HOUSE", badgeCls:"yellow", ph:"kombucha", ph_en:"kombucha" },
+    { name:"jus Patrick Font", name_en:"Patrick Font juice", desc:"Pomme, tomates, nectar d'abricot.", desc_en:"Apple, tomato, apricot nectar.", price:"3.50€", badge:"", badge_en:"", ph:"jus artisanal", ph_en:"craft juice" },
+    { name:"NOCCO", name_en:"NOCCO", desc:"Boisson fonctionnelle aux BCAA.", desc_en:"Functional BCAA drink.", price:"3.50€", badge:"", badge_en:"", ph:"canette NOCCO", ph_en:"NOCCO can" },
+    { name:"infusions pétillantes Symples", name_en:"sparkling infusions Symples", desc:"Estivale — romarin, pêche · Détox — sauge, sureau, pomme · Relax — verveine, lavande, cerise · Énergisante — thym, menthe, poivre, citron.", desc_en:"Summer — rosemary, peach · Detox — sage, elderberry, apple · Relax — verbena, lavender, cherry · Energising — thyme, mint, pepper, lemon.", price:"4€", badge:"4 RECETTES", badge_en:"4 RECIPES", badgeCls:"green", ph:"infusion pétillante", ph_en:"sparkling infusion" },
+    { name:"bières sans alcool Goxoa", name_en:"alcohol-free beers Goxoa", desc:"Blonde ALE, IPA, Blanche Citron.", desc_en:"Blonde ALE, IPA, Lemon Wheat.", price:"4€", badge:"0,0%", badge_en:"0.0%", ph:"bière sans alcool", ph_en:"alcohol-free beer" },
+    { name:"Vitamin Well", name_en:"Vitamin Well", desc:"Boisson vitaminée, plusieurs parfums.", desc_en:"Vitamin drink, several flavours.", price:"4€", badge:"", badge_en:"", ph:"Vitamin Well", ph_en:"Vitamin Well" },
+  ],
+  menus: [
+    { name:"Formule complète", name_en:"Full combo", desc:"Bowl + boisson + dessert.", desc_en:"Bowl + drink + dessert.", price:"19€", badge:"FORMULE", badge_en:"COMBO", badgeCls:"yellow", ph:"formule bowl", ph_en:"bowl combo" },
+    { name:"Formule smoothie", name_en:"Smoothie combo", desc:"Bowl + smoothie (boost +1.50€) + dessert.", desc_en:"Bowl + smoothie (boost +€1.50) + dessert.", price:"20€", badge:"FORMULE", badge_en:"COMBO", badgeCls:"yellow", ph:"formule smoothie", ph_en:"smoothie combo" },
+  ],
+};
+
+const MENU_NOTES = {
+  bowls: { fr:"<strong>Choisis ta sauce</strong> — blanche / curry mangue / vinaigrette.<br/><strong>Extras</strong> — poulet +2.50€ · œuf +1€ · avocat +1.50€. Une intolérance ou allergie ? On s'adapte. Besoin d'un objectif précis ? Demande-nous tes macros.",
+            en:"<strong>Choose your sauce</strong> — white / mango curry / vinaigrette.<br/><strong>Extras</strong> — chicken +€2.50 · egg +€1 · avocado +€1.50. Any intolerance or allergy? We adapt. Need a specific goal? Ask us for your macros." },
+  smoothies: { fr:"<strong>Boost ton smoothie</strong> — +1 boost : +2€ · +2 boost : +3.50€. Boost Nutripure : whey isolate / protéines végétales / créatine / collagène marin.<br/>Arômes : vanille, chocolat, framboise, noisette, citron, coco.",
+               en:"<strong>Boost your smoothie</strong> — +1 boost: +€2 · +2 boost: +€3.50. Nutripure boost: whey isolate / plant protein / creatine / marine collagen.<br/>Flavours: vanilla, chocolate, raspberry, hazelnut, lemon, coconut." },
+  menus: { fr:"<strong>Taille L</strong> — +1.50€ sur la formule.",
+           en:"<strong>Size L</strong> — +€1.50 on the combo." },
+};
+
+let currentTab = 'bowls';
+function renderMenu(tab) {
+  currentTab = tab;
+  const en = (window.RP_LANG === 'en');
+  const grid = document.getElementById('menuGrid');
+  grid.innerHTML = MENU[tab].map(item => `
+    <div class="menu-card">
+      <div class="photo">${item.img ? `<img src="${item.img}" alt="${en ? item.name_en : item.name}" loading="lazy"${item.imgpos ? ` style="object-position:${item.imgpos}"` : ''} />` : `<span class="ph-label" aria-hidden="true">${en ? item.ph_en : item.ph}</span>`}</div>
+      <div class="body">
+        <div class="name">${en ? item.name_en : item.name}</div>
+        <div class="desc">${en ? item.desc_en : item.desc}</div>
+        ${item.macros ? `<div class="macros">${item.macros.map(m => `<div class="macro-line">${m.label ? `<span class="ml">${m.label}</span>` : ''}<span class="kcal">${m.kcal} kcal</span><span><b>${m.p}</b>g ${en?'prot':'prot'}</span><span><b>${m.g}</b>g ${en?'carbs':'gluc'}</span><span><b>${m.l}</b>g ${en?'fat':'lip'}</span>${m.f!=null ? `<span><b>${m.f}</b>g ${en?'fibre':'fibres'}</span>` : ''}</div>`).join('')}</div>` : ''}
+        <div class="row">
+          <span class="price">${item.price}</span>
+          ${(en ? item.badge_en : item.badge) ? `<span class="badge ${item.badgeCls||''}">${en ? item.badge_en : item.badge}</span>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+  // Notes block under the grid (sauces, sizes, boosts)
+  const notes = document.getElementById('menuNotes');
+  if (notes) {
+    const n = MENU_NOTES[tab];
+    let html = n ? `<p>${en ? n.en : n.fr}</p>` : '';
+    // On the "Menus" tab, also list the drinks under the two combos
+    if (tab === 'menus') {
+      html += `<div class="menu-drinks"><h4>${en ? 'Drinks' : 'Boissons'}</h4><ul>` +
+        MENU.boissons.map(d => `<li><span class="d-name">${en ? d.name_en : d.name}</span><span class="d-price">${d.price}</span></li>`).join('') +
+        `</ul></div>`;
+    }
+    notes.innerHTML = html;
+    notes.style.display = html ? 'block' : 'none';
+  }
+  // Animate cards in
+  gsap.fromTo('.menu-card',
+    { y: 40, opacity: 0, scale: 0.95 },
+    { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.55, ease: 'power3.out', overwrite: true }
+  );
+}
+
+function activateMenuTab(tab) {
+  const btn = document.querySelector(`.menu-tab[data-tab="${tab}"]`);
+  if (!btn) return;
+  document.querySelectorAll('.menu-tab').forEach(x => { x.classList.remove('active'); x.setAttribute('aria-selected','false'); });
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected','true');
+  renderMenu(tab);
+}
+document.querySelectorAll('.menu-tab').forEach(btn => {
+  btn.addEventListener('click', () => activateMenuTab(btn.dataset.tab));
+});
+renderMenu('bowls');
+
+/* Photos → click to open a navigable lightbox (arrows, swipe, keyboard) */
+(function() {
+  const lb = document.createElement('div');
+  lb.className = 'lightbox';
+  lb.setAttribute('role', 'dialog');
+  lb.setAttribute('aria-modal', 'true');
+  lb.innerHTML =
+    '<button class="lb-close" type="button" aria-label="Fermer">✕</button>' +
+    '<button class="lb-nav lb-prev" type="button" aria-label="Précédent">‹</button>' +
+    '<figure class="lb-stage"><img alt="" /><figcaption class="lb-count"></figcaption></figure>' +
+    '<button class="lb-nav lb-next" type="button" aria-label="Suivant">›</button>';
+  document.body.appendChild(lb);
+  const lbImg = lb.querySelector('img');
+  const lbCount = lb.querySelector('.lb-count');
+  const prevBtn = lb.querySelector('.lb-prev');
+  const nextBtn = lb.querySelector('.lb-next');
+  let group = [];   // [{src, alt}]
+  let idx = 0;
+
+  function groupFor(img) {
+    if (img.closest('.gallery-item')) {
+      // gallery: unique images only (skip the aria-hidden loop clones)
+      return [...document.querySelectorAll('.gallery-item:not([aria-hidden="true"]) img')]
+        .map(i => ({ src: i.src, alt: i.alt }));
+    }
+    if (img.closest('.menu-card')) {
+      // menu: the photographed dishes of the current tab
+      return [...document.querySelectorAll('#menuGrid .menu-card .photo img')]
+        .map(i => ({ src: i.src, alt: i.alt }));
+    }
+    return [{ src: img.src, alt: img.alt }];
+  }
+  function render() {
+    const item = group[idx];
+    lbImg.src = item.src; lbImg.alt = item.alt || '';
+    const multi = group.length > 1;
+    prevBtn.style.display = nextBtn.style.display = multi ? 'flex' : 'none';
+    lbCount.style.display = multi ? 'block' : 'none';
+    lbCount.textContent = multi ? `${idx + 1} / ${group.length}` : '';
+  }
+  function go(step) { idx = (idx + step + group.length) % group.length; render(); }
+  function open(img) {
+    group = groupFor(img);
+    idx = Math.max(0, group.findIndex(g => g.src === img.src));
+    render();
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('click', e => {
+    const img = e.target.closest('.menu-card .photo img, .gallery-item img');
+    if (img) { e.preventDefault(); open(img); }
+  });
+  lb.addEventListener('click', e => { if (e.target === lb || e.target.tagName === 'FIGURE') close(); });
+  lb.querySelector('.lb-close').addEventListener('click', e => { e.stopPropagation(); close(); });
+  prevBtn.addEventListener('click', e => { e.stopPropagation(); go(-1); });
+  nextBtn.addEventListener('click', e => { e.stopPropagation(); go(1); });
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') close();
+    else if (e.key === 'ArrowRight') go(1);
+    else if (e.key === 'ArrowLeft') go(-1);
+  });
+  // Swipe on touch
+  let sx = 0, sy = 0;
+  lb.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? 1 : -1);
+  }, { passive: true });
+})();
+
+/* Concept pillars → jump to the matching menu tab */
+document.querySelectorAll('.pillar[data-menu-tab]').forEach(pillar => {
+  pillar.addEventListener('click', e => {
+    e.preventDefault();
+    activateMenuTab(pillar.dataset.menuTab);
+    const target = document.getElementById('menu');
+    if (target) {
+      if (typeof lenis !== 'undefined' && lenis.scrollTo) lenis.scrollTo(target, { offset: -10 });
+      else target.scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+
+/* ================================================================
+   LOCATIONS SYNC
+================================================================ */
+function setLoc(i) {
+  document.querySelectorAll('.pin').forEach(p => p.classList.toggle('active', p.dataset.loc == i));
+  document.querySelectorAll('.loc-item').forEach(p => p.classList.toggle('active', p.dataset.loc == i));
+}
+document.querySelectorAll('.pin').forEach(p => {
+  p.addEventListener('click', () => setLoc(p.dataset.loc));
+  p.addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') setLoc(p.dataset.loc); });
+});
+document.querySelectorAll('.loc-item[data-loc]').forEach(p => {
+  p.addEventListener('mouseenter', () => setLoc(p.dataset.loc));
+  p.addEventListener('click', () => setLoc(p.dataset.loc));
+});
+
+/* ================================================================
+   CHIPS + FORM
+================================================================ */
+document.querySelectorAll('#evChips .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('#evChips .chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+  });
+});
+document.getElementById('devisForm').addEventListener('submit', e => {
+  e.preventDefault();
+  document.getElementById('devisForm').style.display = 'none';
+  document.getElementById('formSuccess').classList.add('show');
+});
+
+/* ================================================================
+   HAMBURGER MENU
+================================================================ */
+(function() {
+  const burger  = document.getElementById('burger');
+  const overlay = document.getElementById('menuOverlay');
+  if (!burger || !overlay) return;
+  const links   = overlay.querySelectorAll('a');
+
+  function openMenu() {
+    burger.classList.add('open');
+    overlay.classList.add('open');
+    document.body.classList.add('menu-open');
+    burger.setAttribute('aria-expanded', 'true');
+    burger.setAttribute('aria-label', 'Fermer le menu');
+    links.forEach((a, i) => {
+      a.style.transitionDelay = (0.08 + i * 0.06) + 's';
+    });
+  }
+  function closeMenu() {
+    burger.classList.remove('open');
+    overlay.classList.remove('open');
+    document.body.classList.remove('menu-open');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Ouvrir le menu');
+    links.forEach(a => { a.style.transitionDelay = '0s'; });
+  }
+  function toggleMenu() {
+    overlay.classList.contains('open') ? closeMenu() : openMenu();
+  }
+
+  burger.addEventListener('click', toggleMenu);
+  links.forEach(a => a.addEventListener('click', closeMenu));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) closeMenu();
+  });
+})();
+
+/* ================================================================
+   LENIS SMOOTH SCROLL
+================================================================ */
+gsap.registerPlugin(ScrollTrigger);
+
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  direction: 'vertical',
+  smooth: true,
+  smoothTouch: false,
+});
+
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(time => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+
+/* ================================================================
+   PROGRESS BAR
+================================================================ */
+gsap.to('#progressBar', {
+  scaleX: 1, ease: 'none',
+  scrollTrigger: {
+    trigger: document.documentElement,
+    start: 'top top',
+    end: 'bottom bottom',
+    scrub: 0.3,
+  }
+});
+
+/* ================================================================
+   NAV SCROLL STATE
+================================================================ */
+const navEl = document.getElementById('nav');
+ScrollTrigger.create({
+  start: 'top -10',
+  onUpdate: self => navEl.classList.toggle('scrolled', self.scroll() > 6),
+});
+
+/* ================================================================
+   CUSTOM CURSOR
+================================================================ */
+const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+const cursorDot = document.getElementById('cursorDot');
+const cursorRing = document.getElementById('cursorRing');
+
+if (hasFinePointer) {
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    gsap.to(cursorDot, { x: mx, y: my, duration: 0.06, overwrite: true });
+  });
+
+  gsap.ticker.add(() => {
+    rx += (mx - rx) * 0.1;
+    ry += (my - ry) * 0.1;
+    gsap.set(cursorRing, { x: rx, y: ry });
+  });
+
+  document.querySelectorAll('a, button, [role="button"], .reel, .loc-item, .pin, .chip, .menu-tab').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursorRing.classList.add('big'); cursorDot.classList.add('hidden'); });
+    el.addEventListener('mouseleave', () => { cursorRing.classList.remove('big'); cursorDot.classList.remove('hidden'); });
+  });
+}
+
+
+/* ================================================================
+   HERO — TYPEWRITER EYEBROW
+================================================================ */
+(function() {
+  const el = document.getElementById('eyebrowText');
+  if (!el) return;
+  const text = (window.RP_LANG === 'en') ? 'OPENING SOON — NANTES' : 'OUVERTURE BIENTÔT — NANTES';
+  let i = 0;
+  el.textContent = '';
+  setTimeout(() => {
+    const iv = setInterval(() => {
+      el.textContent += text[i++];
+      if (i >= text.length) clearInterval(iv);
+    }, 38);
+  }, 200);
+})();
+
+/* ================================================================
+   HERO — ENTRANCE TIMELINE
+================================================================ */
+const heroTl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+heroTl
+  .from('.hero-vignette', { y: -30, opacity: 0, scale: 0.7, duration: 0.7, ease: 'back.out(1.7)' }, 0)
+  .from('.hero-title', { y: 34, opacity: 0, duration: 0.9, ease: 'power3.out' }, 0.5)
+  .from('.hero .lead', { y: 26, opacity: 0, duration: 0.7 }, 0.9)
+  .from('.cta-row .btn', { y: 18, opacity: 0, scale: 0.92, stagger: 0.1, duration: 0.55 }, 1.15);
+
+/* ================================================================
+   HERO — PARALLAX ON SCROLL
+================================================================ */
+if (hasFinePointer) {
+  gsap.to('.hero-inner', {
+    y: -50, opacity: 0.25, ease: 'none',
+    scrollTrigger: { trigger: '.hero', scrub: 1, start: 'top top', end: 'bottom top' }
+  });
+}
+
+
+/* ================================================================
+   SCROLL REVEALS — helpers
+================================================================ */
+function reveal(selector, vars, triggerSel) {
+  gsap.utils.toArray(selector).forEach(el => {
+    gsap.from(el, {
+      ...{ y: 55, opacity: 0, duration: 0.85, ease: 'power3.out' },
+      ...vars,
+      scrollTrigger: { trigger: triggerSel ? el.closest(triggerSel) || el : el, start: 'top 88%' }
+    });
+  });
+}
+
+/* Labels */
+gsap.utils.toArray('.label').forEach(el => {
+  gsap.from(el, { opacity: 0, x: -22, duration: 0.6, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+});
+
+/* Mascottes — fade reveal only, no movement / hover / float */
+gsap.utils.toArray('.concept-mascotte, .priv-mascotte, .footer-mascotte').forEach(el => {
+  gsap.from(el, { opacity: 0, duration: 0.9, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 92%' } });
+});
+
+/* H2 — clip-path wipe = "written before your eyes" */
+gsap.utils.toArray('.h2').forEach(el => {
+  gsap.from(el, {
+    clipPath: 'inset(0 100% 0 0)',
+    opacity: 0,
+    duration: 1.15, ease: 'power3.inOut',
+    scrollTrigger: { trigger: el, start: 'top 88%' }
+  });
+});
+
+/* Section lead paragraphs (priv-left <p> is handled by the .priv-left > * reveal below) */
+gsap.utils.toArray('.section-head p').forEach(el => {
+  gsap.from(el, { y: 26, opacity: 0, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } });
+});
+
+/* Pillars */
+gsap.from('.pillar', {
+  y: 70, opacity: 0, scale: 0.96, stagger: 0.12, duration: 0.9, ease: 'power3.out',
+  scrollTrigger: { trigger: '.pillars', start: 'top 82%' }
+});
+
+/* Triptych */
+gsap.from('.tri', {
+  y: 50, opacity: 0, stagger: 0.14, duration: 0.85, ease: 'power3.out',
+  scrollTrigger: { trigger: '.triptych', start: 'top 82%' }
+});
+
+/* Reel cards */
+gsap.from('.reel', {
+  y: 90, opacity: 0, scale: 0.88, stagger: 0.1, duration: 0.85, ease: 'power3.out',
+  scrollTrigger: { trigger: '.reel-row', start: 'top 82%' }
+});
+
+/* Gallery — fade the whole strip in (items keep their CSS tilt + scroll) */
+gsap.from('.gallery-marquee', {
+  opacity: 0, y: 30, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.gallery-marquee', start: 'top 88%' }
+});
+
+/* Map */
+gsap.from('.map-card', {
+  scale: 0.94, opacity: 0, duration: 0.9, ease: 'power3.out',
+  scrollTrigger: { trigger: '.map-card', start: 'top 82%' }
+});
+gsap.from('.pin', {
+  scale: 0, opacity: 0, stagger: 0.09, duration: 0.5, ease: 'back.out(2.2)',
+  scrollTrigger: { trigger: '.map-card', start: 'top 75%' }
+});
+
+/* Loc items */
+gsap.from('.loc-item', {
+  x: 55, opacity: 0, stagger: 0.07, duration: 0.65, ease: 'power3.out',
+  scrollTrigger: { trigger: '.loc-list', start: 'top 82%' }
+});
+
+/* Privatize section */
+gsap.from('.priv-left > *', {
+  y: 38, opacity: 0, stagger: 0.12, duration: 0.75, ease: 'power3.out',
+  scrollTrigger: { trigger: '.priv-grid', start: 'top 80%' }
+});
+gsap.from('.form-card', {
+  x: 75, opacity: 0, duration: 0.9, ease: 'power3.out',
+  scrollTrigger: { trigger: '.form-card', start: 'top 82%' }
+});
+
+/* Testimonials */
+gsap.from('.test', {
+  y: 60, opacity: 0, stagger: 0.14, duration: 0.8, ease: 'power3.out',
+  scrollTrigger: { trigger: '.test-grid', start: 'top 84%' }
+});
+
+/* Footer */
+gsap.from('.foot-top > *', {
+  y: 30, opacity: 0, stagger: 0.1, duration: 0.75, ease: 'power3.out',
+  scrollTrigger: { trigger: 'footer', start: 'top 85%' }
+});
+
+/* ================================================================
+   SECTION BACKGROUND PARALLAX TINTS
+================================================================ */
+if (hasFinePointer) {
+  gsap.to('.triptych', {
+    backgroundPosition: '0 20%',
+    ease: 'none',
+    scrollTrigger: { trigger: '.triptych', scrub: true }
+  });
+}
+
+/* ================================================================
+   MAGNETIC BUTTONS
+================================================================ */
+if (hasFinePointer) {
+  document.querySelectorAll('.btn, .menu-tab').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width  / 2) * 0.38;
+      const y = (e.clientY - r.top  - r.height / 2) * 0.38;
+      gsap.to(btn, { x, y, duration: 0.3, ease: 'power2.out', overwrite: true });
+    });
+    btn.addEventListener('mouseleave', () => {
+      gsap.to(btn, { x: 0, y: 0, duration: 0.65, ease: 'elastic.out(1, 0.4)', overwrite: true });
+    });
+  });
+
+  /* Pillar tilt on hover */
+  document.querySelectorAll('.pillar').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width  - 0.5) * 10;
+      const y = ((e.clientY - r.top)  / r.height - 0.5) * 10;
+      gsap.to(card, { rotateY: x, rotateX: -y, z: 20, transformPerspective: 600, duration: 0.4, ease: 'power2.out', overwrite: true });
+    });
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, { rotateY: 0, rotateX: 0, z: 0, duration: 0.6, ease: 'elastic.out(1,0.5)', overwrite: true });
+    });
+  });
+
+  /* Menu card tilt */
+  document.querySelector('.menu-section').addEventListener('mousemove', e => {
+    const card = e.target.closest('.menu-card');
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width  - 0.5) * 12;
+    const y = ((e.clientY - r.top)  / r.height - 0.5) * 12;
+    gsap.to(card, { rotateY: x, rotateX: -y, transformPerspective: 700, duration: 0.35, ease: 'power2.out', overwrite: true });
+  });
+  document.querySelector('.menu-section').addEventListener('mouseleave', () => {
+    document.querySelectorAll('.menu-card').forEach(c => {
+      gsap.to(c, { rotateY: 0, rotateX: 0, duration: 0.6, ease: 'elastic.out(1,0.4)', overwrite: true });
+    });
+  });
+}
+
+/* ================================================================
+   INSTAGRAM EMBEDS — process + refresh scroll positions
+================================================================ */
+(function() {
+  const row = document.querySelector('.reel-row');
+  function processEmbeds() {
+    if (window.instgrm && window.instgrm.Embeds) {
+      window.instgrm.Embeds.process();
+    }
+  }
+  // Debounced refresh: recompute scroll positions only once things settle,
+  // never repeatedly mid-scroll (that fought Lenis and made the IG section jumpy).
+  let settleTimer;
+  function refreshSoon() {
+    clearTimeout(settleTimer);
+    settleTimer = setTimeout(() => {
+      if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+    }, 300);
+  }
+  // Re-process a few times while embed.js loads asynchronously (no refresh on each tick).
+  let tries = 0;
+  const iv = setInterval(() => {
+    processEmbeds();
+    if (++tries >= 6) clearInterval(iv);
+  }, 900);
+  window.addEventListener('load', processEmbeds);
+  // Refresh only when the embeds actually change the row height.
+  if (row && 'ResizeObserver' in window) {
+    new ResizeObserver(refreshSoon).observe(row);
+  }
+  // Instagram posts a message each time an embed finishes rendering/resizing.
+  window.addEventListener('message', e => {
+    if (typeof e.data === 'string' && e.data.indexOf('instgrm') !== -1) refreshSoon();
+  });
+})();
+
+/* ================================================================
+   SCROLL-DRIVEN BIG TEXT COUNTER in TRIPTYCH
+================================================================ */
+document.querySelectorAll('.tri .big').forEach(el => {
+  gsap.from(el, {
+    clipPath: 'inset(0 100% 0 0)',
+    duration: 0.9, ease: 'power3.inOut',
+    scrollTrigger: { trigger: el, start: 'top 85%' }
+  });
+});
+
+/* ================================================================
+   TRUCK JOURNEY — MotionPath along the dotted road
+================================================================ */
+(function() {
+  if (typeof MotionPathPlugin === 'undefined') return;
+  gsap.registerPlugin(MotionPathPlugin);
+
+  const truck = document.getElementById('scrolltruck');
+  const inner = document.getElementById('truckInner');
+  if (!truck) return;
+
+  // Follow the SVG path from start to end as the page is scrolled
+  gsap.to(truck, {
+    motionPath: {
+      path: '#truckPath',
+      align: '#truckPath',
+      alignOrigin: [0.5, 1],  // bottom-center of truck on path
+      autoRotate: true,
+    },
+    ease: 'none',
+    scrollTrigger: {
+      trigger: document.documentElement,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 4,               // slow, smooth follow
+    }
+  });
+
+  // Reveal the dotted road progressively in sync with the truck
+  gsap.to('#revealRect', {
+    attr: { width: 1460 },
+    ease: 'none',
+    scrollTrigger: {
+      trigger: document.documentElement,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 4,
+    }
+  });
+
+  // Gentle bobbing on the inner element (doesn't conflict with MotionPath)
+  gsap.to(inner, {
+    y: -7, duration: 1, yoyo: true, repeat: -1, ease: 'sine.inOut'
+  });
+})();
+</script>
+</body>
+</html>
