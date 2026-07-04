@@ -552,6 +552,49 @@
     .lightbox .lb-prev { left: 8px; }
     .lightbox .lb-next { right: 8px; }
   }
+
+  /* ============ EVENT POPUP ============ */
+  .event-pop {
+    position: fixed; inset: 0; z-index: 10001;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    background: rgba(20,8,0,.72); backdrop-filter: blur(4px);
+    opacity: 0; visibility: hidden; transition: opacity .3s ease;
+  }
+  .event-pop.open { opacity: 1; visibility: visible; }
+  .event-card {
+    position: relative; width: min(420px, 100%);
+    background: var(--cream); color: var(--ink);
+    border: 3px solid var(--ink); border-radius: 22px;
+    box-shadow: 12px 12px 0 0 var(--orange);
+    padding: 34px 30px 30px; text-align: center;
+    transform: translateY(20px) scale(.95); transition: transform .3s ease;
+  }
+  .event-pop.open .event-card { transform: none; }
+  .event-card .ev-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 38px; height: 38px; border-radius: 50%;
+    background: var(--cream); color: var(--ink); border: 2.5px solid var(--ink);
+    font-family: var(--block); font-size: 15px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; transition: background .15s;
+  }
+  .event-card .ev-close:hover { background: var(--orange); }
+  .event-card .ev-icon { font-size: 34px; line-height: 1; }
+  .event-card .ev-badge {
+    display: inline-block; margin-top: 8px;
+    background: var(--red); color: var(--cream);
+    font-family: var(--block); font-size: 12px; letter-spacing: .1em;
+    padding: 6px 14px; border-radius: 999px; transform: rotate(-3deg);
+  }
+  .event-card .ev-title {
+    font-family: var(--display); font-size: clamp(26px, 6vw, 34px);
+    line-height: 1.05; margin: 14px 0 12px;
+  }
+  .event-card .ev-title em { color: var(--orange); font-style: normal; }
+  .event-card .ev-line { font-weight: 700; font-size: 16px; }
+  .event-card .ev-line.place { color: var(--ink-soft); font-weight: 600; font-size: 15px; margin-top: 3px; }
+  .event-card .ev-note { color: var(--ink-soft); font-size: 14px; line-height: 1.5; margin-top: 12px; }
+  .event-card .ev-cta { margin-top: 22px; }
+
   .menu-card .body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .menu-card .name { font-family: var(--block); font-size: 20px; line-height: 1.1; }
   .menu-card .desc { color: var(--ink-soft); font-size: 14px; flex: 1; }
@@ -834,7 +877,9 @@
     .tri:last-child { border-bottom: none; }
   }
   @media (max-width: 560px) {
-    .reel-row, .menu-grid { grid-template-columns: 1fr; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .reel-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .reel-row .instagram-media { max-width: 100% !important; border-width: 2px !important; box-shadow: 4px 4px 0 0 var(--ink) !important; }
   }
 
   /* ============ WAVE SEPARATORS ============ */
@@ -1351,6 +1396,58 @@
 
 <script>
 /* ================================================================
+   POP-UP ÉVÈNEMENT  —  ⚙️  À MODIFIER ICI
+   ----------------------------------------------------------------
+   • Pour annoncer un évènement/une présence ponctuelle du food truck.
+   • active: true  → affiche le pop-up   |   active: false → rien.
+   • id: CHANGE-LE à chaque nouvel évènement (sinon les visiteurs qui
+     l'ont déjà fermé ne le reverront pas). Ex: 'marche-noel-2026'.
+================================================================ */
+const RP_EVENT = {
+  active: true,
+  id: 'cine-plein-air-2026-07-04',
+  badge: "ON Y SERA 🚚",
+  title: "Cinéma en plein air",
+  date: "Samedi 4 juillet — dès 19h",
+  place: "Stade du Zéphir, Le Loroux-Bottereau",
+  note: "Retrouve le food truck sur place : bowls, smoothies & desserts !",
+  ctaLabel: "Voir nos emplacements",
+  ctaHref: "#locations"
+};
+(function() {
+  if (!RP_EVENT.active) return;
+  try { if (localStorage.getItem('rp-ev-' + RP_EVENT.id)) return; } catch (e) {}
+  const el = document.createElement('div');
+  el.className = 'event-pop';
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-modal', 'true');
+  el.setAttribute('aria-label', 'Annonce évènement');
+  el.innerHTML =
+    '<div class="event-card">' +
+      '<button class="ev-close" type="button" aria-label="Fermer">✕</button>' +
+      '<div class="ev-icon" aria-hidden="true">📍</div>' +
+      (RP_EVENT.badge ? `<div class="ev-badge">${RP_EVENT.badge}</div>` : '') +
+      `<div class="ev-title">${RP_EVENT.title}</div>` +
+      `<div class="ev-line">${RP_EVENT.date}</div>` +
+      (RP_EVENT.place ? `<div class="ev-line place">${RP_EVENT.place}</div>` : '') +
+      (RP_EVENT.note ? `<div class="ev-note">${RP_EVENT.note}</div>` : '') +
+      (RP_EVENT.ctaLabel ? `<a href="${RP_EVENT.ctaHref || '#'}" class="btn btn-primary ev-cta">${RP_EVENT.ctaLabel}</a>` : '') +
+    '</div>';
+  document.body.appendChild(el);
+  function close(remember) {
+    el.classList.remove('open');
+    if (remember) { try { localStorage.setItem('rp-ev-' + RP_EVENT.id, '1'); } catch (e) {} }
+    setTimeout(() => el.remove(), 300);
+  }
+  el.querySelector('.ev-close').addEventListener('click', () => close(true));
+  el.addEventListener('click', e => { if (e.target === el) close(true); });
+  const cta = el.querySelector('.ev-cta');
+  if (cta) cta.addEventListener('click', () => close(true));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && el.classList.contains('open')) close(true); });
+  setTimeout(() => el.classList.add('open'), 1100);
+})();
+
+/* ================================================================
    I18N — FR / EN
 ================================================================ */
 window.RP_LANG = 'fr';
@@ -1514,9 +1611,9 @@ document.querySelectorAll('.lang-toggle button').forEach(b => {
 ================================================================ */
 const MENU = {
   bowls: [
-    { name:"rollin' fuel", name_en:"rollin' fuel", desc:"Mix de riz, poulet bbq fumé-sucré, poivrons fondants, tomates cerises, mesclun, pickles d'oignons, feta.", desc_en:"Rice mix, smoky-sweet BBQ chicken, melting peppers, cherry tomatoes, mesclun, pickled onions, feta.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/fuel.jpg", imgpos:"center 42%", macros:[{label:"M",kcal:461,p:29,g:58,l:13,f:2},{label:"L",kcal:600,p:37,g:63,l:24,f:4}], ph:"bowl poulet bbq", ph_en:"BBQ chicken bowl" },
-    { name:"rollin' boost", name_en:"rollin' boost", desc:"Mix de riz, poulet façon pita, carottes râpées, chou rouge, pickles, mesclun, herbes fraîches, mélange de graines, copeaux de parmesan.", desc_en:"Rice mix, pita-style chicken, grated carrots, red cabbage, pickles, mesclun, fresh herbs, seed mix, parmesan shavings.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/PHOTOSbowlboost.jpeg", imgpos:"center 45%", macros:[{label:"M",kcal:365,p:34,g:41,l:7,f:3},{label:"L",kcal:660,p:52,g:71,l:21,f:7}], ph:"bowl poulet pita", ph_en:"pita chicken bowl" },
-    { name:"rollin' green", name_en:"rollin' green", desc:"Mix de riz, œufs, aubergines rôties en tranches, avocat fondant, fèves edamame crispy, pois chiches grillés.", desc_en:"Rice mix, eggs, roasted sliced eggplant, melting avocado, crispy edamame, grilled chickpeas.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/bowlzer.jpeg", imgpos:"center 42%", macros:[{label:"M",kcal:556,p:21,g:33,l:38,f:2},{label:"L",kcal:865,p:36,g:60,l:46,f:25}], ph:"bowl végétal", ph_en:"veggie bowl" },
+    { name:"rollin' fuel", name_en:"rollin' fuel", desc:"Mix de riz, poulet bbq fumé-sucré, poivrons fondants, tomates cerises, mesclun, pickles d'oignons, feta.", desc_en:"Rice mix, smoky-sweet BBQ chicken, melting peppers, cherry tomatoes, mesclun, pickled onions, feta.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/menu-fuel.jpg", imgpos:"center 52%", macros:[{label:"M",kcal:461,p:29,g:58,l:13,f:2},{label:"L",kcal:600,p:37,g:63,l:24,f:4}], ph:"bowl poulet bbq", ph_en:"BBQ chicken bowl" },
+    { name:"rollin' boost", name_en:"rollin' boost", desc:"Mix de riz, poulet façon pita, carottes râpées, chou rouge, pickles, mesclun, herbes fraîches, mélange de graines, copeaux de parmesan.", desc_en:"Rice mix, pita-style chicken, grated carrots, red cabbage, pickles, mesclun, fresh herbs, seed mix, parmesan shavings.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/menu-boost.jpg", imgpos:"center 50%", macros:[{label:"M",kcal:365,p:34,g:41,l:7,f:3},{label:"L",kcal:660,p:52,g:71,l:21,f:7}], ph:"bowl poulet pita", ph_en:"pita chicken bowl" },
+    { name:"rollin' green", name_en:"rollin' green", desc:"Mix de riz, œufs, aubergines rôties en tranches, avocat fondant, fèves edamame crispy, pois chiches grillés.", desc_en:"Rice mix, eggs, roasted sliced eggplant, melting avocado, crispy edamame, grilled chickpeas.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/menu-green.jpg", imgpos:"center 52%", macros:[{label:"M",kcal:556,p:21,g:33,l:38,f:2},{label:"L",kcal:865,p:36,g:60,l:46,f:25}], ph:"bowl végétal", ph_en:"veggie bowl" },
   ],
   smoothies: [
     { name:"fresh", name_en:"fresh", desc:"Framboise, myrtille, lait d'amande.", desc_en:"Raspberry, blueberry, almond milk.", price:"5.50€", badge:"", badge_en:"", macros:[{kcal:158,p:5,g:25,l:3,f:5}], ph:"smoothie rouge", ph_en:"red smoothie" },
