@@ -1275,7 +1275,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
           <div class="form-row">
             <div class="field"><label for="evdate">Date</label><input id="evdate" type="date" required /></div>
-            <div class="field"><label for="people">Nombre de personnes</label><input id="people" type="number" min="30" required placeholder="50" /></div>
+            <div class="field"><label for="people">Nombre de personnes</label><input id="people" type="number" min="20" required placeholder="50" /></div>
           </div>
           <div class="form-row full">
             <div class="field">
@@ -1841,7 +1841,34 @@ document.querySelectorAll('#evChips .chip').forEach(c => {
 });
 document.getElementById('devisForm').addEventListener('submit', e => {
   e.preventDefault();
-  document.getElementById('devisForm').style.display = 'none';
+  const form = e.currentTarget;
+  if (!form.reportValidity()) return; // vérifie les champs requis
+  const v = id => (document.getElementById(id)?.value || '').trim();
+  const evChip = document.querySelector('#evChips .chip.active');
+  const evType = evChip ? evChip.textContent.trim() : 'Non précisé';
+  const body = [
+    'Bonjour,',
+    '',
+    "Je souhaite un devis pour une privatisation du food truck Rollin' Protéines.",
+    '',
+    'Prénom : ' + v('fname'),
+    'Nom : ' + v('lname'),
+    'Email : ' + v('email'),
+    'Téléphone : ' + (v('phone') || '—'),
+    'Date : ' + (v('evdate') || '—'),
+    'Nombre de personnes : ' + (v('people') || '—'),
+    "Type d'évènement : " + evType,
+    '',
+    'Message :',
+    (v('msg') || '—'),
+    '',
+    'Merci !'
+  ].join('\n');
+  const subject = "Demande de devis — privatisation Rollin' Protéines";
+  window.location.href = 'mailto:rollinproteines@gmail.com'
+    + '?subject=' + encodeURIComponent(subject)
+    + '&body=' + encodeURIComponent(body);
+  form.style.display = 'none';
   document.getElementById('formSuccess').classList.add('show');
 });
 
