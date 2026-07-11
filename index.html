@@ -1214,14 +1214,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="map-river" aria-hidden="true"></div>
         <div class="map-legend">NANTES &amp; AUTOUR</div>
         <div class="pin active" style="left:42%;top:72%;" tabindex="0" role="button" aria-label="Limit.O — La Chevrolière"><span class="tip">Limit.O · La Chevrolière</span></div>
-        <div class="pin" style="left:27%;top:63%;" tabindex="0" role="button" aria-label="Wake Up Form — Les Sorinières"><span class="tip">Wake Up Form · Les Sorinières</span></div>
         <div class="pin" style="left:37%;top:56%;" tabindex="0" role="button" aria-label="MathMotorShop — Les Sorinières"><span class="tip">MathMotorShop · Les Sorinières</span></div>
       </div>
       <div class="loc-list" id="locList">
-        <div class="loc-item" tabindex="0" role="button">
-          <span class="day">LUNDI</span>
-          <div><div class="place">Wake Up Form — 10 rue de Nantes, 44840 Les Sorinières</div><div class="hours">À PARTIR DU 20 JUILLET</div></div>
-        </div>
         <div class="loc-item active" tabindex="0" role="button">
           <span class="day">MARDI</span>
           <div><div class="place">Limit.O — 28 rue de la Guillauderie, 44118 La Chevrolière</div><div class="hours">12h00 — 14h00</div></div>
@@ -1427,12 +1422,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 ================================================================ */
 const RP_EVENT = {
   active: true,
-  id: 'cine-plein-air-2026-07-04',
-  badge: "ON Y SERA 🚚",
-  title: "Cinéma en plein air",
-  date: "Samedi 4 juillet — dès 19h",
-  place: "Stade du Zéphir, Le Loroux-Bottereau",
-  note: "Retrouve le food truck sur place : bowls, smoothies & desserts !",
+  id: 'pas-de-service-2026-07-14',
+  icon: "⚠️",
+  badge: "INFO",
+  title: "Pas de service",
+  date: "Mardi 14 juillet",
+  place: "",
+  note: "Le food truck ne sera pas présent ce mardi. On se retrouve jeudi chez MathMotorShop !",
   ctaLabel: "Voir nos emplacements",
   ctaHref: "#locations"
 };
@@ -1447,7 +1443,7 @@ const RP_EVENT = {
   el.innerHTML =
     '<div class="event-card">' +
       '<button class="ev-close" type="button" aria-label="Fermer">✕</button>' +
-      '<div class="ev-icon" aria-hidden="true">📍</div>' +
+      `<div class="ev-icon" aria-hidden="true">${RP_EVENT.icon || '📍'}</div>` +
       (RP_EVENT.badge ? `<div class="ev-badge">${RP_EVENT.badge}</div>` : '') +
       `<div class="ev-title">${RP_EVENT.title}</div>` +
       `<div class="ev-line">${RP_EVENT.date}</div>` +
