@@ -744,7 +744,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     will-change: transform;
   }
   .loc-item:hover, .loc-item.active { background: var(--orange); }
-  .loc-item .day { font-family: var(--block); font-size: 14px; letter-spacing: .12em; color: var(--red); width: 100px; flex-shrink: 0; }
+  .loc-item .day { font-family: var(--block); font-size: 13px; letter-spacing: .04em; color: var(--red); width: 108px; flex-shrink: 0; }
   .loc-item:hover .day, .loc-item.active .day { color: var(--ink); }
   .loc-item .place { font-weight: 700; font-size: 17px; }
   .loc-item .hours { font-family: var(--block); font-size: 12px; letter-spacing: .08em; color: var(--ink-soft); }
@@ -1184,10 +1184,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <figure class="gallery-item" style="--r:-2.5deg"><img src="uploads/food/gallery/g4.jpg" alt="Bowl protéiné garni" loading="lazy" /><figcaption>frais</figcaption></figure>
           <figure class="gallery-item" style="--r:1.5deg"><img src="uploads/food/gallery/g6.jpg" alt="Bowl avec œuf mollet" loading="lazy" /><figcaption>du bien</figcaption></figure>
           <figure class="gallery-item" style="--r:-3deg"><img src="uploads/food/gallery/g8.jpg" alt="Bowls sur nappe rayée" loading="lazy" /><figcaption>à partager</figcaption></figure>
+          <figure class="gallery-item" style="--r:2deg"><img src="uploads/food/gallery/g9.jpg" alt="Smoothies Rollin' Protéines sur le food truck" loading="lazy" /><figcaption>smoothies</figcaption></figure>
           <figure class="gallery-item" style="--r:2.5deg" aria-hidden="true"><img src="uploads/food/gallery/g2.jpg" alt="" loading="lazy" /><figcaption>protéiné</figcaption></figure>
           <figure class="gallery-item" style="--r:-2.5deg" aria-hidden="true"><img src="uploads/food/gallery/g4.jpg" alt="" loading="lazy" /><figcaption>frais</figcaption></figure>
           <figure class="gallery-item" style="--r:1.5deg" aria-hidden="true"><img src="uploads/food/gallery/g6.jpg" alt="" loading="lazy" /><figcaption>du bien</figcaption></figure>
           <figure class="gallery-item" style="--r:-3deg" aria-hidden="true"><img src="uploads/food/gallery/g8.jpg" alt="" loading="lazy" /><figcaption>à partager</figcaption></figure>
+          <figure class="gallery-item" style="--r:2deg" aria-hidden="true"><img src="uploads/food/gallery/g9.jpg" alt="" loading="lazy" /><figcaption>smoothies</figcaption></figure>
         </div>
       </div>
     </div>
@@ -1213,17 +1215,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="map-bg" aria-hidden="true"></div>
         <div class="map-river" aria-hidden="true"></div>
         <div class="map-legend">NANTES &amp; AUTOUR</div>
-        <div class="pin active" style="left:42%;top:72%;" tabindex="0" role="button" aria-label="Limit.O — La Chevrolière"><span class="tip">Limit.O · La Chevrolière</span></div>
-        <div class="pin" style="left:37%;top:56%;" tabindex="0" role="button" aria-label="MathMotorShop — Les Sorinières"><span class="tip">MathMotorShop · Les Sorinières</span></div>
+        <div class="pin" style="left:16%;top:44%;" tabindex="0" role="button" aria-label="Play Club de Sport — Saint-Herblain"><span class="tip">Play Club · Saint-Herblain</span></div>
+        <div class="pin" style="left:44%;top:58%;" tabindex="0" role="button" aria-label="Italibike — Rezé"><span class="tip">Italibike · Rezé</span></div>
+        <div class="pin" style="left:70%;top:63%;" tabindex="0" role="button" aria-label="Decathlon — Vertou"><span class="tip">Decathlon · Vertou</span></div>
+        <div class="pin" style="left:38%;top:74%;" tabindex="0" role="button" aria-label="Math Motor Shop — Les Sorinières"><span class="tip">Math Motor Shop · Les Sorinières</span></div>
+        <div class="pin active" style="left:50%;top:84%;" tabindex="0" role="button" aria-label="Limit.O — La Chevrolière"><span class="tip">Limit.O · La Chevrolière</span></div>
       </div>
       <div class="loc-list" id="locList">
         <div class="loc-item active" tabindex="0" role="button">
-          <span class="day">MARDI</span>
+          <span class="day">LUNDI</span>
           <div><div class="place">Limit.O — 28 rue de la Guillauderie, 44118 La Chevrolière</div><div class="hours">12h00 — 14h00</div></div>
         </div>
         <div class="loc-item" tabindex="0" role="button">
+          <span class="day">MARDI</span>
+          <div><div class="place">Play Club de Sport — 96 rue Gustave Eiffel, 44800 Saint-Herblain</div><div class="hours">12h00 — 14h00</div></div>
+        </div>
+        <div class="loc-item" tabindex="0" role="button">
+          <span class="day">MERCREDI</span>
+          <div><div class="place">Decathlon Vertou — rue des Grands Châtaigniers, 44120 Vertou</div><div class="hours">12h00 — 14h00</div></div>
+        </div>
+        <div class="loc-item" tabindex="0" role="button">
           <span class="day">JEUDI</span>
-          <div><div class="place">MathMotorShop — 10 rue du Moulin des Landes, 44840 Les Sorinières</div><div class="hours">12h00 — 14h00</div></div>
+          <div><div class="place">Math Motor Shop — 10 rue des Moulins des Landes, 44840 Les Sorinières</div><div class="hours">12h00 — 14h00</div></div>
+        </div>
+        <div class="loc-item" tabindex="0" role="button">
+          <span class="day">VENDREDI</span>
+          <div><div class="place">Italibike — 129 route des Sorinières, 44000 Rezé</div><div class="hours">12h00 — 14h00</div></div>
         </div>
         <div class="loc-item" tabindex="0" role="button">
           <span class="day">ÉVÈNEMENTS</span>
@@ -1421,7 +1438,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      l'ont déjà fermé ne le reverront pas). Ex: 'marche-noel-2026'.
 ================================================================ */
 const RP_EVENT = {
-  active: true,
+  active: false,
   id: 'pas-de-service-jusquau-31-aout-2026',
   icon: "⚠️",
   badge: "INFO",
@@ -1529,7 +1546,7 @@ const I18N_EN = {
   // locations
   "Sur les routes de Nantes et alentours.": 'On the roads <em>of Nantes</em> and around.',
   "NANTES & AUTOUR": "NANTES & AROUND",
-  "LUN": "MON", "LUNDI": "MONDAY", "MAR": "TUE", "MARDI": "TUESDAY", "MER": "WED", "JEU": "THU", "JEUDI": "THURSDAY", "VEN": "FRI", "WEEK-END": "WEEKEND", "ÉVÈNEMENTS": "EVENTS",
+  "LUN": "MON", "LUNDI": "MONDAY", "MAR": "TUE", "MARDI": "TUESDAY", "MER": "WED", "MERCREDI": "WEDNESDAY", "JEU": "THU", "JEUDI": "THURSDAY", "VEN": "FRI", "VENDREDI": "FRIDAY", "WEEK-END": "WEEKEND", "ÉVÈNEMENTS": "EVENTS",
   "À PARTIR DU 20 JUILLET": "FROM JULY 20",
   "Carquefou — Zone d'activité": "Carquefou — Business park",
   "Évènements & privatisation": "Events & private hire",
@@ -1631,16 +1648,17 @@ document.querySelectorAll('.lang-toggle button').forEach(b => {
 const MENU = {
   bowls: [
     { name:"rollin' fuel", name_en:"rollin' fuel", desc:"Mix de riz, poulet bbq fumé-sucré, poivrons fondants, tomates cerises, mesclun, pickles d'oignons, feta.", desc_en:"Rice mix, smoky-sweet BBQ chicken, melting peppers, cherry tomatoes, mesclun, pickled onions, feta.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/menu-fuel.jpg", imgpos:"center 52%", macros:[{label:"M",kcal:461,p:29,g:58,l:13,f:2},{label:"L",kcal:600,p:37,g:63,l:24,f:4}], ph:"bowl poulet bbq", ph_en:"BBQ chicken bowl" },
-    { name:"rollin' boost", name_en:"rollin' boost", desc:"Mix de riz, poulet façon pita, carottes râpées, chou rouge, pickles, mesclun, herbes fraîches, mélange de graines, copeaux de parmesan.", desc_en:"Rice mix, pita-style chicken, grated carrots, red cabbage, pickles, mesclun, fresh herbs, seed mix, parmesan shavings.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/menu-boost.jpg", imgpos:"center 50%", macros:[{label:"M",kcal:365,p:34,g:41,l:7,f:3},{label:"L",kcal:660,p:52,g:71,l:21,f:7}], ph:"bowl poulet pita", ph_en:"pita chicken bowl" },
-    { name:"rollin' green", name_en:"rollin' green", desc:"Mix de riz, œufs, aubergines rôties en tranches, avocat fondant, fèves edamame crispy, pois chiches grillés.", desc_en:"Rice mix, eggs, roasted sliced eggplant, melting avocado, crispy edamame, grilled chickpeas.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/menu-green.jpg", imgpos:"center 52%", macros:[{label:"M",kcal:556,p:21,g:33,l:38,f:2},{label:"L",kcal:865,p:36,g:60,l:46,f:25}], ph:"bowl végétal", ph_en:"veggie bowl" },
+    { name:"rollin' boost", name_en:"rollin' boost", desc:"Mix de riz, poulet mariné au soja, carottes râpées, chou rouge, pickles, mesclun, mélange de graines, copeaux de parmesan.", desc_en:"Rice mix, soy-marinated chicken, grated carrots, red cabbage, pickles, mesclun, seed mix, parmesan shavings.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/menu-boost.jpg", imgpos:"center 50%", macros:[{label:"M",kcal:365,p:34,g:41,l:7,f:3},{label:"L",kcal:660,p:52,g:71,l:21,f:7}], ph:"bowl poulet pita", ph_en:"pita chicken bowl" },
+    { name:"rollin' green", name_en:"rollin' green", desc:"Mix de riz, œufs, aubergines rôties en tranches, avocat fondant, mesclun, fèves edamame crispy, houmous.", desc_en:"Rice mix, eggs, roasted sliced eggplant, melting avocado, mesclun, crispy edamame, hummus.", price:"13 / 15€", badge:"M / L", badge_en:"M / L", img:"uploads/food/menu-green.jpg", imgpos:"center 52%", macros:[{label:"M",kcal:556,p:21,g:33,l:38,f:2},{label:"L",kcal:865,p:36,g:60,l:46,f:25}], ph:"bowl végétal", ph_en:"veggie bowl" },
   ],
   smoothies: [
-    { name:"fresh", name_en:"fresh", desc:"Framboise, myrtille, lait d'amande.", desc_en:"Raspberry, blueberry, almond milk.", price:"5.50€", badge:"", badge_en:"", macros:[{kcal:158,p:5,g:25,l:3,f:5}], ph:"smoothie rouge", ph_en:"red smoothie" },
-    { name:"passion", name_en:"passion", desc:"Mangue, passion, lait de coco.", desc_en:"Mango, passion fruit, coconut milk.", price:"5.50€", badge:"", badge_en:"", macros:[{kcal:168,p:1,g:35,l:2,f:1}], ph:"smoothie exotique", ph_en:"tropical smoothie" },
+    { name:"fresh", name_en:"fresh", desc:"Framboise, myrtille, lait d'amande.", desc_en:"Raspberry, blueberry, almond milk.", price:"5.50€", badge:"", badge_en:"", macros:[{kcal:158,p:5,g:25,l:3,f:5}], img:"uploads/food/smoothie-fresh.jpg", imgpos:"center 55%", ph:"smoothie rouge", ph_en:"red smoothie" },
+    { name:"passion", name_en:"passion", desc:"Mangue, passion, lait de coco.", desc_en:"Mango, passion fruit, coconut milk.", price:"5.50€", badge:"", badge_en:"", macros:[{kcal:168,p:1,g:35,l:2,f:1}], img:"uploads/food/smoothie-passion.jpg", imgpos:"center 45%", ph:"smoothie exotique", ph_en:"tropical smoothie" },
   ],
   desserts: [
     { name:"granola crunchy", name_en:"crunchy granola", desc:"Skyr, granola au choix (flocon d'avoine sans gluten disponible), banane, fruits séchés.", desc_en:"Skyr, granola of your choice (gluten-free oats available), banana, dried fruit.", price:"4€", badge:"", badge_en:"", macros:[{kcal:256,p:16,g:40,l:4,f:4}], img:"uploads/food/granola-crunchy.jpeg", imgpos:"center 45%", ph:"granola skyr", ph_en:"granola & skyr" },
     { name:"cookie du moment", name_en:"cookie of the moment", desc:"Le cookie maison du jour, toujours ultra gourmand.", desc_en:"The homemade cookie of the day, always ultra indulgent.", price:"3.50€", badge:"", badge_en:"", macros:[{kcal:200,p:9,g:20,l:19}], img:"uploads/food/cookie.jpeg", imgpos:"center 45%", ph:"cookie", ph_en:"cookie" },
+    { name:"Banana bread marbré", name_en:"Marbled banana bread", desc:"Banana bread marbré, crumble façon cookie — moelleux et gourmand.", desc_en:"Marbled banana bread, cookie-style crumble — soft and indulgent.", price:"?€", badge:"NOUVEAU", badge_en:"NEW", badgeCls:"yellow", macros:[{kcal:285,g:32,p:7.5,l:14.5}], ph:"banana bread", ph_en:"banana bread" },
   ],
   boissons: [
     { name:"bouteille d'eau", name_en:"water bottle", desc:"Cristaline, Badois.", desc_en:"Cristaline, Badois.", price:"2€", badge:"", badge_en:"", ph:"eau", ph_en:"water" },
@@ -1653,7 +1671,7 @@ const MENU = {
   ],
   menus: [
     { name:"Formule complète", name_en:"Full combo", desc:"Bowl + boisson + dessert.", desc_en:"Bowl + drink + dessert.", price:"19€", badge:"FORMULE", badge_en:"COMBO", badgeCls:"yellow", ph:"formule bowl", ph_en:"bowl combo" },
-    { name:"Formule smoothie", name_en:"Smoothie combo", desc:"Bowl + smoothie (boost +1.50€) + dessert.", desc_en:"Bowl + smoothie (boost +€1.50) + dessert.", price:"20€", badge:"FORMULE", badge_en:"COMBO", badgeCls:"yellow", ph:"formule smoothie", ph_en:"smoothie combo" },
+    { name:"Formule smoothie", name_en:"Smoothie combo", desc:"Bowl + smoothie (boost +1.50€) + dessert.", desc_en:"Bowl + smoothie (boost +€1.50) + dessert.", price:"21€", badge:"FORMULE", badge_en:"COMBO", badgeCls:"yellow", ph:"formule smoothie", ph_en:"smoothie combo" },
   ],
 };
 
