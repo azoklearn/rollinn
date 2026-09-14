@@ -170,6 +170,21 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   /* ============ LANGUAGE TOGGLE ============ */
   .nav-tools { display: flex; align-items: center; gap: 12px; }
+  .nav-cc {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--orange); color: var(--ink);
+    border: 2px solid var(--ink); border-radius: 999px;
+    padding: 8px 16px; font-family: var(--block); font-size: 12px; letter-spacing: .04em;
+    box-shadow: 3px 3px 0 0 var(--ink); white-space: nowrap;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .nav-cc:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 0 var(--ink); }
+  .nav-cc .cc-short { display: none; }
+  @media (max-width: 560px) {
+    .nav-cc { padding: 7px 12px; font-size: 11px; gap: 4px; }
+    .nav-cc .cc-full { display: none; }
+    .nav-cc .cc-short { display: inline; }
+  }
   .lang-toggle {
     display: inline-flex;
     align-items: center;
@@ -1007,6 +1022,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="#privatiser">Privatiser</a>
     </nav>
     <div class="nav-tools">
+      <a href="https://commande-en-ligne.laddition.com/commande-en-ligne/5Wy9tMLKJJR1Y8u" target="_blank" rel="noopener" class="nav-cc" aria-label="Click and Collect — commander en ligne"><span aria-hidden="true">🛒</span> <span class="cc-full">Click &amp; Collect</span><span class="cc-short">Commander</span></a>
       <div class="lang-toggle" role="group" aria-label="Langue / Language">
         <button type="button" data-lang="fr" class="active" aria-pressed="true">FR</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -1026,6 +1042,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <a href="#galerie">Galerie</a>
   <a href="#locations">Où nous trouver</a>
   <a href="#privatiser">Privatiser</a>
+  <a href="https://commande-en-ligne.laddition.com/commande-en-ligne/5Wy9tMLKJJR1Y8u" target="_blank" rel="noopener" class="menu-cta">🛒 Click &amp; Collect</a>
   <a href="#devis" class="menu-cta">Demander un devis</a>
   <div class="menu-foot">Good vibes · Good food · Good gains.</div>
 </div>
@@ -1039,7 +1056,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       Bowls, plats, desserts healthy &amp; smoothies.
     </p>
     <div class="cta-row">
-      <a href="#menu" class="btn btn-primary">Voir le menu</a>
+      <a href="https://commande-en-ligne.laddition.com/commande-en-ligne/5Wy9tMLKJJR1Y8u" target="_blank" rel="noopener" class="btn btn-primary">🛒 Click &amp; Collect</a>
+      <a href="#menu" class="btn btn-ghost">Voir le menu</a>
       <a href="#locations" class="btn btn-ghost">Nous trouver →</a>
     </div>
   </div>
@@ -1218,7 +1236,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="pin" style="left:16%;top:44%;" tabindex="0" role="button" aria-label="Play Club de Sport — Saint-Herblain"><span class="tip">Play Club · Saint-Herblain</span></div>
         <div class="pin" style="left:44%;top:58%;" tabindex="0" role="button" aria-label="Italibike — Rezé"><span class="tip">Italibike · Rezé</span></div>
         <div class="pin" style="left:70%;top:63%;" tabindex="0" role="button" aria-label="Decathlon — Vertou"><span class="tip">Decathlon · Vertou</span></div>
-        <div class="pin" style="left:38%;top:74%;" tabindex="0" role="button" aria-label="Math Motor Shop — Les Sorinières"><span class="tip">Math Motor Shop · Les Sorinières</span></div>
         <div class="pin active" style="left:50%;top:84%;" tabindex="0" role="button" aria-label="Limit.O — La Chevrolière"><span class="tip">Limit.O · La Chevrolière</span></div>
       </div>
       <div class="loc-list" id="locList">
@@ -1233,10 +1250,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="loc-item" tabindex="0" role="button">
           <span class="day">MERCREDI</span>
           <div><div class="place">Decathlon Vertou — rue des Grands Châtaigniers, 44120 Vertou</div><div class="hours">12h00 — 14h00</div></div>
-        </div>
-        <div class="loc-item" tabindex="0" role="button">
-          <span class="day">JEUDI</span>
-          <div><div class="place">Math Motor Shop — 10 rue des Moulins des Landes, 44840 Les Sorinières</div><div class="hours">12h00 — 14h00</div></div>
         </div>
         <div class="loc-item" tabindex="0" role="button">
           <span class="day">VENDREDI</span>
