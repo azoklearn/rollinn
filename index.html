@@ -505,6 +505,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   .menu-section .label { color: var(--yellow); border-color: var(--yellow); }
   .menu-section .h2 { color: var(--cream); }
   .menu-section .h2 em { color: var(--orange); }
+  .menu-standby { text-align: center; max-width: 560px; margin: 6px auto 0; padding: 20px 20px 10px; }
+  .menu-standby .ms-icon { font-size: 54px; line-height: 1; }
+  .menu-standby h3 { font-family: var(--display); color: var(--orange); font-size: clamp(24px, 5vw, 36px); line-height: 1.12; margin: 16px 0 12px; }
+  .menu-standby p { color: rgba(251,239,217,.82); font-size: 16px; line-height: 1.6; }
   .menu-tabs {
     display: inline-flex;
     background: rgba(251,239,217,.08); border: 2px solid rgba(251,239,217,.2);
@@ -1022,7 +1026,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <a href="#privatiser">Privatiser</a>
     </nav>
     <div class="nav-tools">
-      <a href="https://commande-en-ligne.laddition.com/commande-en-ligne/5Wy9tMLKJJR1Y8u" target="_blank" rel="noopener" class="nav-cc" aria-label="Click and Collect — commander en ligne"><span aria-hidden="true">🛒</span> <span class="cc-full">Click &amp; Collect</span><span class="cc-short">Commander</span></a>
       <div class="lang-toggle" role="group" aria-label="Langue / Language">
         <button type="button" data-lang="fr" class="active" aria-pressed="true">FR</button>
         <button type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -1042,7 +1045,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <a href="#galerie">Galerie</a>
   <a href="#locations">Où nous trouver</a>
   <a href="#privatiser">Privatiser</a>
-  <a href="https://commande-en-ligne.laddition.com/commande-en-ligne/5Wy9tMLKJJR1Y8u" target="_blank" rel="noopener" class="menu-cta">🛒 Click &amp; Collect</a>
   <a href="#devis" class="menu-cta">Demander un devis</a>
   <div class="menu-foot">Good vibes · Good food · Good gains.</div>
 </div>
@@ -1056,8 +1058,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       Bowls, plats, desserts healthy &amp; smoothies.
     </p>
     <div class="cta-row">
-      <a href="https://commande-en-ligne.laddition.com/commande-en-ligne/5Wy9tMLKJJR1Y8u" target="_blank" rel="noopener" class="btn btn-primary">🛒 Click &amp; Collect</a>
-      <a href="#menu" class="btn btn-ghost">Voir le menu</a>
+      <a href="#menu" class="btn btn-primary">Voir le menu</a>
       <a href="#locations" class="btn btn-ghost">Nous trouver →</a>
     </div>
   </div>
@@ -1132,17 +1133,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="wrap">
     <div class="section-head">
       <span class="label">Le menu</span>
-      <h2 class="h2">À la carte, <em>healthy &amp; gourmand.</em></h2>
+      <h2 class="h2">Une nouvelle carte <em>arrive.</em></h2>
     </div>
-    <div class="menu-tabs" role="tablist" id="menuTabs">
+
+    <!-- ===== MENU EN STAND-BY =====
+         Pour réafficher le menu : supprime ce bloc .menu-standby
+         et retire les attributs `hidden` des 3 éléments ci-dessous. -->
+    <div class="menu-standby">
+      <div class="ms-icon" aria-hidden="true">🍳</div>
+      <h3>Nous vous préparons de nouvelles recettes</h3>
+      <p>Notre carte fait peau neuve — encore plus gourmande et équilibrée. Revenez très vite&nbsp;!</p>
+    </div>
+
+    <div class="menu-tabs" role="tablist" id="menuTabs" hidden>
       <button class="menu-tab active" role="tab" aria-selected="true" data-tab="bowls">Bowls</button>
       <button class="menu-tab" role="tab" aria-selected="false" data-tab="smoothies">Smoothies</button>
       <button class="menu-tab" role="tab" aria-selected="false" data-tab="desserts">Desserts</button>
       <button class="menu-tab" role="tab" aria-selected="false" data-tab="boissons">Boissons</button>
       <button class="menu-tab" role="tab" aria-selected="false" data-tab="menus">Menus</button>
     </div>
-    <div class="menu-grid" id="menuGrid" role="tabpanel"></div>
-    <div class="menu-notes" id="menuNotes"></div>
+    <div class="menu-grid" id="menuGrid" role="tabpanel" hidden></div>
+    <div class="menu-notes" id="menuNotes" hidden></div>
   </div>
 </section>
 
@@ -1539,6 +1550,10 @@ const I18N_EN = {
   // menu
   "Le menu": "The menu",
   "À la carte, healthy & gourmand.": 'À la carte, <em>healthy &amp; gourmet.</em>',
+  "Une nouvelle carte arrive.": 'A new menu <em>is coming.</em>',
+  "Nous vous préparons de nouvelles recettes": "We're cooking up new recipes",
+  "Notre carte fait peau neuve — encore plus gourmande et équilibrée. Revenez très vite !":
+    "Our menu is getting a makeover — even tastier and more balanced. Come back very soon!",
   "Boissons": "Drinks",
   // series
   "La série Instagram": "The Instagram series",
@@ -1606,7 +1621,7 @@ const I18N_EN = {
 const I18N_SELECTOR = [
   '.nav-links a', '.menu-overlay a', '.menu-foot',
   '.hero-title', '.hero .lead', '.cta-row a',
-  '.section-head .label', '.h2', '#concept .section-head p',
+  '.section-head .label', '.h2', '#concept .section-head p', '.menu-standby h3', '.menu-standby p',
   '.pillar h3', '.pillar p', '.pillar-cta', '.tri p',
   '.menu-tab',
   '#series .section-head p', '.reel .top', '.reel .sub', '.reel .ep',
